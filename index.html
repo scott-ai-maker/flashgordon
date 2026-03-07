@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Flash Gordon — Pre-Shot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -410,9 +412,7 @@ function runStep(seq, idx, myRunId) {
   //    HOLD   → 500ms (gives SHOOT speech time to finish — SHOOT takes ~400ms to say)
   //    others → 100ms
   if (s.speak) {
-    const offset = (s.label === 'EXECUTE') ? 150
-                 : (s.label === 'HOLD')    ? 500
-                 :                           100;
+    const offset = (s.label === 'HOLD') ? 450 : 0;
     sayAt(s.speak, now + offset, myRunId);
   }
 
