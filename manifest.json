@@ -1,1 +1,24 @@
-{"name": "Flash Gordon — Pre-Shot","short_name": "Flash Gordon","description": "Pre-shot routine trainer for Flash Gordon. 76 BPM, 4/4 time.","start_url": ".","display": "standalone","orientation": "portrait","background_color": "#05080D","theme_color": "#05080D","icons": [{"src": "icon-192.png","sizes": "192x192","type": "image/png","purpose": "any maskable"},{"src": "icon-512.png","sizes": "512x512","type": "image/png","purpose": "any maskable"}]}
+{
+  "name": "Flash Gordon — Pre-Shot",
+  "short_name": "Flash Gordon",
+  "description": "Pre-shot routine trainer for Flash Gordon. 76 BPM, 4/4 time.",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05080D",
+  "theme_color": "#05080D",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
