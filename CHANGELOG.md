@@ -1,5 +1,36 @@
 # Flash Gordon — Changelog
 
+## v2.5.0 — 2026-03-16
+
+### Master Drills — Streak Mastery System
+
+Five pro-standard drills accessible via ▸ MASTER DRILLS on the main screen.
+Philosophy: **Streak Mastery over high scores**. Level completion requires 3
+consecutive passing sessions.
+
+**Drills:**
+1. **Stop Shot Ladder** — 15 consecutive perfect stops (3 ladder rotations).
+   Failure triggers "Check Elbow Stillness" Mechanical Audit.
+2. **Long Straight** — 10/10 straight-in from full table. Self-flag STATUE
+   rule: if you moved before ball dropped, it counts as a fail.
+3. **L-Drill** — 5 consecutive full racks (5 balls each). INNER / OUTER zone
+   buttons track position quality; outer zone fails the rack.
+4. **Rail Cut** — 10 consecutive left + 10 consecutive right. If misses on one
+   side hit threshold → "Vision Alignment Bias" Mechanical Audit fires.
+5. **The Mother Drill** — 3 consecutive full clears (15 balls, no cushions,
+   no touches, no misses). The Final Boss.
+
+**Mechanical Audit modal**: blocks the next rep until CONTINUE is tapped.
+Fires on every streak-reset failure for drills that have an audit cue.
+
+**Session streak**: 3 filled pips = MASTERED. A failed session resets the
+streak to 0. Session history stored in `fg_drill_sessions` (localStorage).
+
+**Focus Score** added to SHOT ANALYSIS: % of sessions with zero Rushed or
+Dropped errors. Colour-coded with diagnostic insight at extremes.
+
+---
+
 ## v2.4.0 — 2026-03-16
 
 ### Weekly Volume Goal (#5) & Routine Completion Rate (#4)

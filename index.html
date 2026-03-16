@@ -212,6 +212,95 @@ animation: pulse 1.0s ease-in-out infinite;
 .err-btn.hit { color:var(--red); border-color:rgba(255,68,68,0.65); background:rgba(255,68,68,0.1); }
 .err-count { font-size:7px; position:absolute; top:-5px; right:-4px; background:var(--red); color:#fff; border-radius:50%; width:12px; height:12px; display:none; align-items:center; justify-content:center; line-height:1; }
 .err-count.show { display:flex; }
+
+/* ── Trigger row ───────────────────────────────────────── */
+.trigger-row { display:flex; gap:28px; justify-content:center; }
+.drills-btn { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:var(--text-dim); background:transparent; border:none; cursor:pointer; margin-top:7px; padding:3px 0; opacity:0.55; transition:all 0.2s; outline:none; }
+.drills-btn:hover { opacity:1; color:var(--gold); }
+
+/* ── Drills overlay ─────────────────────────────────────── */
+.drills-overlay { display:none; position:fixed; inset:0; background:rgba(4,8,14,0.96); z-index:100; flex-direction:column; align-items:center; overflow-y:auto; padding:24px 20px 40px; }
+.drills-panel { width:100%; max-width:420px; }
+.drills-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.drills-title { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:5px; color:var(--gold); }
+.drills-close { font-family:'Share Tech Mono',monospace; font-size:14px; color:var(--text-dim); background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:3px; width:28px; height:28px; cursor:pointer; outline:none; transition:all 0.15s; }
+.drills-close:hover { border-color:var(--gold); color:var(--gold); }
+
+/* Drill cards */
+.drill-card { background:rgba(201,168,76,0.05); border:1px solid rgba(201,168,76,0.15); border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+.drill-card.mastered { border-color:var(--gold); background:rgba(201,168,76,0.08); }
+.drill-card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:5px; }
+.drill-card-name { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--gold); }
+.drill-card-tag { font-family:'Exo 2',sans-serif; font-size:8px; letter-spacing:2px; color:var(--text-dim); text-transform:uppercase; margin-top:2px; }
+.drill-card-target { font-size:10px; color:var(--text-dim); margin:6px 0 8px; }
+.drill-pips { display:flex; gap:6px; align-items:center; }
+.drill-pip { width:10px; height:10px; border-radius:50%; border:1px solid rgba(201,168,76,0.3); background:transparent; }
+.drill-pip.filled { background:var(--gold); border-color:var(--gold); }
+.drill-pip.mastered-pip { background:var(--gold); border-color:var(--gold); box-shadow:0 0 6px var(--gold); }
+.drill-mastered-badge { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--gold); text-shadow:0 0 8px var(--gold); white-space:nowrap; }
+.drill-start-btn { width:100%; margin-top:10px; padding:10px; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--gold); border-radius:5px; cursor:pointer; transition:all 0.2s; outline:none; -webkit-tap-highlight-color:transparent; }
+.drill-start-btn:hover { background:rgba(201,168,76,0.12); border-color:var(--gold); }
+.drill-start-btn.dimmed { border-color:rgba(201,168,76,0.25); color:rgba(201,168,76,0.5); }
+
+/* Drill execution */
+.drill-exec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.drill-exec-name { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--gold); }
+.drill-exec-quit { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:3px; padding:4px 8px; cursor:pointer; outline:none; transition:all 0.15s; }
+.drill-exec-quit:hover { border-color:var(--red); color:var(--red); }
+.drill-session-streak { display:flex; gap:8px; justify-content:center; align-items:center; margin-bottom:18px; }
+.drill-session-pip { width:14px; height:14px; border-radius:50%; border:1px solid rgba(201,168,76,0.3); transition:all 0.3s; }
+.drill-session-pip.filled { background:var(--gold); border-color:var(--gold); box-shadow:0 0 8px rgba(201,168,76,0.6); }
+.drill-session-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:3px; color:var(--text-dim); margin-left:6px; }
+
+/* Counters */
+.drill-counter-block { text-align:center; margin:16px 0; }
+.drill-counter-main { font-family:'Orbitron',sans-serif; font-size:52px; font-weight:700; color:var(--gold); line-height:1; text-shadow:0 0 20px rgba(201,168,76,0.4); }
+.drill-counter-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:var(--text-dim); margin-top:6px; }
+.drill-counter-target { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:rgba(201,168,76,0.45); margin-top:4px; }
+.drill-bilateral { display:flex; gap:16px; justify-content:center; margin:16px 0; }
+.drill-side-block { text-align:center; flex:1; padding:12px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); transition:all 0.3s; }
+.drill-side-block.active-side { border-color:var(--gold); background:rgba(201,168,76,0.06); }
+.drill-side-block.done-side { opacity:0.5; }
+.drill-side-num { font-family:'Orbitron',sans-serif; font-size:38px; font-weight:700; color:var(--gold); }
+.drill-side-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:var(--text-dim); margin-top:4px; }
+.drill-rack-info { display:flex; gap:8px; justify-content:center; margin:16px 0; }
+.drill-rack-stat { text-align:center; flex:1; padding:10px 6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:6px; }
+.drill-rack-num { font-family:'Orbitron',sans-serif; font-size:24px; font-weight:700; color:var(--gold); }
+.drill-rack-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:2px; color:var(--text-dim); }
+.drill-ball-row { text-align:center; margin:8px 0; font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); }
+.drill-ball-row span { font-family:'Orbitron',sans-serif; font-size:18px; color:var(--gold); }
+
+/* Action buttons */
+.drill-actions { display:flex; gap:8px; margin-top:14px; }
+.drill-action-btn { flex:1; padding:15px 4px; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; border-radius:6px; border:2px solid; cursor:pointer; outline:none; transition:background 0.15s; -webkit-tap-highlight-color:transparent; }
+.drill-action-btn.pass  { background:rgba(0,200,80,0.10); border-color:rgba(0,200,80,0.45); color:#00c850; }
+.drill-action-btn.pass:active  { background:rgba(0,200,80,0.22); }
+.drill-action-btn.fail  { background:rgba(255,68,68,0.08); border-color:rgba(255,68,68,0.4); color:var(--red); }
+.drill-action-btn.fail:active  { background:rgba(255,68,68,0.22); }
+.drill-action-btn.flag  { background:rgba(255,180,0,0.08); border-color:rgba(255,180,0,0.4); color:#ffb400; }
+.drill-action-btn.zone-inner { background:rgba(0,191,255,0.08); border-color:rgba(0,191,255,0.35); color:var(--cyan); }
+.drill-action-btn.zone-outer { background:rgba(255,100,0,0.08); border-color:rgba(255,100,0,0.35); color:#ff8040; }
+
+/* Result screen */
+.drill-result { text-align:center; padding:24px 0; }
+.drill-result-icon { font-size:44px; margin-bottom:12px; }
+.drill-result-title { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:700; letter-spacing:2px; margin-bottom:8px; }
+.drill-result-title.pass { color:#00c850; text-shadow:0 0 16px rgba(0,200,80,0.4); }
+.drill-result-title.fail { color:var(--red); }
+.drill-result-sub { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--text-dim); margin-bottom:20px; line-height:1.8; white-space:pre-line; }
+.drill-result-streak { font-family:'Orbitron',sans-serif; font-size:32px; font-weight:700; color:var(--gold); }
+.drill-result-streak-lbl { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:var(--text-dim); margin-bottom:20px; }
+.drill-result-btn { width:100%; padding:14px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; background:rgba(201,168,76,0.10); border:1px solid rgba(201,168,76,0.5); color:var(--gold); border-radius:6px; cursor:pointer; outline:none; }
+
+/* Mechanical Audit modal */
+.audit-modal { display:none; position:fixed; inset:0; background:rgba(2,4,8,0.96); z-index:200; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; }
+.audit-modal.show { display:flex; }
+.audit-icon { font-size:32px; margin-bottom:12px; }
+.audit-title { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:5px; color:var(--red); margin-bottom:18px; text-align:center; }
+.audit-cue { font-family:'Orbitron',sans-serif; font-size:17px; font-weight:600; color:var(--text); text-align:center; letter-spacing:1px; line-height:1.4; margin-bottom:12px; max-width:320px; }
+.audit-sub { font-family:'Exo 2',sans-serif; font-size:12px; color:var(--text-dim); text-align:center; line-height:1.6; max-width:300px; margin-bottom:32px; }
+.audit-continue { width:100%; max-width:320px; padding:16px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:4px; background:rgba(255,68,68,0.10); border:1px solid rgba(255,68,68,0.45); color:var(--red); border-radius:6px; cursor:pointer; outline:none; transition:background 0.2s; }
+.audit-continue:hover { background:rgba(255,68,68,0.20); }
 </style>
 
 </head>
@@ -298,8 +387,11 @@ animation: pulse 1.0s ease-in-out infinite;
     </div>
   </div>
 
-  <!-- Analysis trigger -->
-  <button class="analysis-btn" onclick="showAnalytics('week')">▸ SHOT ANALYSIS</button>
+  <!-- Trigger buttons -->
+  <div class="trigger-row">
+    <button class="analysis-btn" onclick="showAnalytics('week')">▸ SHOT ANALYSIS</button>
+    <button class="drills-btn"   onclick="showDrills()">▸ MASTER DRILLS</button>
+  </div>
 
   <!-- Error log + Outcome -->
   <div class="error-panel" id="errorPanel">
@@ -337,6 +429,26 @@ animation: pulse 1.0s ease-in-out infinite;
     </div>
     <div id="analyticsBody"></div>
   </div>
+</div>
+
+<!-- Drills overlay -->
+<div class="drills-overlay" id="drillsOverlay">
+  <div class="drills-panel">
+    <div class="drills-header">
+      <span class="drills-title">MASTER DRILLS</span>
+      <button class="drills-close" onclick="hideDrills()">✕</button>
+    </div>
+    <div id="drillsContent"></div>
+  </div>
+</div>
+
+<!-- Mechanical Audit modal -->
+<div class="audit-modal" id="auditModal">
+  <div class="audit-icon">⚠</div>
+  <div class="audit-title">MECHANICAL AUDIT</div>
+  <div class="audit-cue" id="auditCue"></div>
+  <div class="audit-sub" id="auditSub"></div>
+  <button class="audit-continue" onclick="dismissAudit()">CONTINUE</button>
 </div>
 
 <script>
@@ -771,6 +883,28 @@ function buildAnalyticsHTML(period) {
       </div>`;
   }
 
+  // ── Focus Score ──────────────────────────────────────────
+  let focusHTML = '';
+  if (periodSessions.length > 0) {
+    const focusSessions = periodSessions.filter(s =>
+      !s.errors || ((!s.errors['Rushed'] || s.errors['Rushed'] === 0) && (!s.errors['Dropped'] || s.errors['Dropped'] === 0))
+    ).length;
+    const focusPct = Math.round(focusSessions / periodSessions.length * 100);
+    const focusCls = focusPct >= 80 ? 'good' : focusPct >= 50 ? 'mid' : 'bad';
+    focusHTML = `
+      <div class="section-divider"></div>
+      <div class="section-title">FOCUS SCORE</div>
+      <div class="pvr-section">
+        <div class="pvr-row">
+          <span class="pvr-desc">Sessions without Rushed or Dropped</span>
+          <span class="pvr-rate ${focusCls}">${focusPct}%</span>
+          <span class="pvr-n">${focusSessions}/${periodSessions.length}</span>
+        </div>
+        ${focusPct === 100 ? `<div class="pvr-insight">Perfect focus discipline. Every session was mechanically clean.</div>` :
+          focusPct < 50 ? `<div class="pvr-insight">Rushed strokes or dropped elbows in most sessions. Slow the process — commit to the sequence before the shot.</div>` : ''}
+      </div>`;
+  }
+
   return `
     <div class="fault-callout">
       <div class="fault-label">#1 FAULT</div>
@@ -785,7 +919,8 @@ function buildAnalyticsHTML(period) {
     <div class="error-bars">${bars}</div>
     <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${periodSessions.length} sessions</div>
     ${outcomeHTML}
-    ${completionHTML}`;
+    ${completionHTML}
+    ${focusHTML}`;
 }
 
 function showAnalytics(period) {
@@ -797,6 +932,339 @@ function showAnalytics(period) {
 
 function hideAnalytics() {
   document.getElementById('analyticsOverlay').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+// MASTER DRILLS
+// ═══════════════════════════════════════════════════════════
+const DRILL_KEY = 'fg_drill_sessions';
+
+const DRILLS = [
+  {
+    id: 'stop-shot-ladder',
+    name: 'Stop Shot Ladder',
+    tag: 'The Baseline',
+    targetDesc: '15 consecutive perfect stops',
+    desc: '5 shots at increasing distances (1–5 diamonds). 3 full rotations.',
+    type: 'streak', target: 15,
+    audit: 'Check Elbow Stillness',
+    auditSub: 'Still your elbow completely before the shot. The cue is a pendulum from a fixed pivot — nothing else moves.',
+  },
+  {
+    id: 'long-straight',
+    name: 'Long Straight',
+    tag: 'The Alignment Test',
+    targetDesc: '10 consecutive straight-in from full table',
+    desc: 'Long rail to long rail. Any miss resets the count. Self-flag STATUE if you moved before the ball dropped.',
+    type: 'streak', target: 10, statue: true,
+  },
+  {
+    id: 'l-drill',
+    name: 'L-Drill',
+    tag: 'The Pattern Benchmark',
+    targetDesc: '5 consecutive full racks (5 balls each)',
+    desc: 'Miss or outer-zone cue-ball position fails the rack. Professionals live in the 6-inch inner circle.',
+    type: 'rack', target: 5, rackSize: 5,
+  },
+  {
+    id: 'rail-cut',
+    name: 'Rail Cut',
+    tag: 'The Vision Test',
+    targetDesc: '10 consecutive left + 10 consecutive right',
+    desc: 'Cut balls down the long rail. Complete left side then right. Any miss or jaw resets that side.',
+    type: 'bilateral', target: 10, biasThreshold: 3,
+    biasAudit: 'Vision Alignment Bias',
+    biasAuditSub: 'You are missing consistently on one side. Before your next SightRight session note which eye is dominant and check your head alignment to the line of aim.',
+  },
+  {
+    id: 'mother',
+    name: 'The Mother Drill',
+    tag: 'The Master Class',
+    targetDesc: '3 consecutive full clears (15 balls)',
+    desc: 'Center-table. No cushions, no touching another ball, no misses. Your Final Boss.',
+    type: 'clear', target: 3, clearSize: 15,
+  },
+];
+
+function getDrillSessions() { return JSON.parse(localStorage.getItem(DRILL_KEY) || '[]'); }
+function saveDrillSession(rec) {
+  const all = getDrillSessions(); all.push(rec);
+  localStorage.setItem(DRILL_KEY, JSON.stringify(all));
+}
+function getDrillStreak(drillId) {
+  const hist = getDrillSessions().filter(s => s.drillId === drillId).sort((a,b) => a.id - b.id);
+  let n = 0;
+  for (let i = hist.length - 1; i >= 0; i--) { if (hist[i].passed) n++; else break; }
+  return Math.min(n, 3);
+}
+
+// ── Overlay open / close ───────────────────────────────────
+function showDrills() {
+  document.getElementById('drillsOverlay').style.display = 'flex';
+  renderDrillList();
+}
+function hideDrills() {
+  document.getElementById('drillsOverlay').style.display = 'none';
+  drillRunning = false; activeDrill = null; ds = {};
+}
+
+// ── List view ──────────────────────────────────────────────
+function renderDrillList() {
+  const html = DRILLS.map(d => {
+    const streak   = getDrillStreak(d.id);
+    const mastered = streak >= 3;
+    const pips = [0,1,2].map(i =>
+      `<div class="drill-pip ${i < streak ? (mastered ? 'mastered-pip' : 'filled') : ''}"></div>`
+    ).join('');
+    return `
+      <div class="drill-card ${mastered ? 'mastered' : ''}">
+        <div class="drill-card-header">
+          <div>
+            <div class="drill-card-name">${d.name.toUpperCase()}</div>
+            <div class="drill-card-tag">${d.tag}</div>
+          </div>
+          ${mastered ? `<span class="drill-mastered-badge">MASTERED</span>` : ''}
+        </div>
+        <div class="drill-card-target">${d.targetDesc}</div>
+        <div class="drill-pips">${pips}<span class="drill-session-lbl">SESSION STREAK</span></div>
+        <button class="drill-start-btn ${mastered ? 'dimmed' : ''}" onclick="startDrill('${d.id}')">
+          ${mastered ? '▸ DRILL AGAIN' : '▸ START DRILL'}
+        </button>
+      </div>`;
+  }).join('');
+  document.getElementById('drillsContent').innerHTML = html;
+}
+
+// ── Execution state ────────────────────────────────────────
+let drillRunning = false;
+let activeDrill  = null;
+let ds = {};
+
+function startDrill(drillId) {
+  activeDrill = DRILLS.find(d => d.id === drillId);
+  drillRunning = true;
+  switch (activeDrill.type) {
+    case 'streak':    ds = { streak: 0 }; break;
+    case 'rack':      ds = { rackStreak: 0, ballInRack: 0, innerZone: 0, outerZone: 0 }; break;
+    case 'bilateral': ds = { side: 'left', leftMade: 0, rightMade: 0, leftMisses: 0, rightMisses: 0 }; break;
+    case 'clear':     ds = { clearStreak: 0, ballInClear: 0 }; break;
+  }
+  document.getElementById('drillsContent').innerHTML = buildExecHTML();
+}
+
+function buildExecHTML() {
+  const d = activeDrill;
+  const streak = getDrillStreak(d.id);
+  const pips = [0,1,2].map(i =>
+    `<div class="drill-session-pip ${i < streak ? 'filled' : ''}"></div>`
+  ).join('');
+
+  let counterHTML = '', actionsHTML = '';
+  switch (d.type) {
+    case 'streak':
+      counterHTML = `
+        <div class="drill-counter-block">
+          <div class="drill-counter-main" id="dcMain">${ds.streak}</div>
+          <div class="drill-counter-label">CONSECUTIVE</div>
+          <div class="drill-counter-target">TARGET · ${d.target}</div>
+        </div>`;
+      actionsHTML = `<div class="drill-actions">
+        ${d.statue ? `<button class="drill-action-btn flag" onclick="drillStatue()">STATUE</button>` : ''}
+        <button class="drill-action-btn pass" onclick="drillPass()">PASS</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">FAIL</button>
+      </div>`;
+      break;
+    case 'rack':
+      counterHTML = `
+        <div class="drill-rack-info">
+          <div class="drill-rack-stat"><div class="drill-rack-num" id="drRacks">${ds.rackStreak}</div><div class="drill-rack-lbl">RACKS</div></div>
+          <div class="drill-rack-stat"><div class="drill-rack-num" id="drBall">${ds.ballInRack + 1}</div><div class="drill-rack-lbl">BALL</div></div>
+          <div class="drill-rack-stat"><div class="drill-rack-num" id="drInner">${ds.innerZone}</div><div class="drill-rack-lbl">INNER</div></div>
+          <div class="drill-rack-stat"><div class="drill-rack-num" id="drOuter">${ds.outerZone}</div><div class="drill-rack-lbl">OUTER</div></div>
+        </div>
+        <div class="drill-counter-target" style="text-align:center">TARGET · ${d.target} consecutive racks</div>`;
+      actionsHTML = `<div class="drill-actions">
+        <button class="drill-action-btn zone-inner" onclick="drillLPass('inner')">INNER</button>
+        <button class="drill-action-btn zone-outer" onclick="drillLPass('outer')">OUTER</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">MISS</button>
+      </div>`;
+      break;
+    case 'bilateral':
+      counterHTML = `
+        <div class="drill-bilateral">
+          <div class="drill-side-block active-side" id="leftBlock">
+            <div class="drill-side-num" id="dcLeft">${ds.leftMade}</div>
+            <div class="drill-side-label">LEFT</div>
+          </div>
+          <div class="drill-side-block" id="rightBlock">
+            <div class="drill-side-num" id="dcRight">${ds.rightMade}</div>
+            <div class="drill-side-label">RIGHT</div>
+          </div>
+        </div>
+        <div class="drill-counter-target" style="text-align:center">TARGET · ${d.target} each side</div>`;
+      actionsHTML = `<div class="drill-actions">
+        <button class="drill-action-btn pass" onclick="drillPass()">PASS</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">FAIL</button>
+      </div>`;
+      break;
+    case 'clear':
+      counterHTML = `
+        <div class="drill-counter-block">
+          <div class="drill-counter-main" id="dcMain">${ds.clearStreak}</div>
+          <div class="drill-counter-label">CLEARS</div>
+          <div class="drill-counter-target">TARGET · ${d.target} consecutive</div>
+        </div>
+        <div class="drill-ball-row">BALL <span id="dcBall">${ds.ballInClear + 1}</span> / ${d.clearSize}</div>`;
+      actionsHTML = `<div class="drill-actions">
+        <button class="drill-action-btn pass" onclick="drillPass()">CLEAR</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">CUSHION</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">TOUCH</button>
+        <button class="drill-action-btn fail" onclick="drillFail()">MISS</button>
+      </div>`;
+      break;
+  }
+  return `
+    <div class="drill-exec-header">
+      <div>
+        <div class="drill-exec-name">${d.name.toUpperCase()}</div>
+        <div class="drill-card-tag">${d.tag}</div>
+      </div>
+      <button class="drill-exec-quit" onclick="quitDrill()">QUIT</button>
+    </div>
+    <div class="drill-session-streak">${pips}<span class="drill-session-lbl">SESSION STREAK</span></div>
+    ${counterHTML}
+    ${actionsHTML}`;
+}
+
+// ── Action handlers ────────────────────────────────────────
+function drillPass() {
+  const d = activeDrill;
+  if (d.type === 'streak') {
+    ds.streak++;
+    setEl('dcMain', ds.streak);
+    if (ds.streak >= d.target) finishDrillSession(true);
+  } else if (d.type === 'bilateral') {
+    if (ds.side === 'left') {
+      ds.leftMade++;
+      setEl('dcLeft', ds.leftMade);
+      if (ds.leftMade >= d.target) {
+        ds.side = 'right';
+        const lb = document.getElementById('leftBlock');
+        const rb = document.getElementById('rightBlock');
+        if (lb) lb.className = 'drill-side-block done-side';
+        if (rb) rb.className = 'drill-side-block active-side';
+      }
+    } else {
+      ds.rightMade++;
+      setEl('dcRight', ds.rightMade);
+      if (ds.rightMade >= d.target) finishDrillSession(true);
+    }
+  } else if (d.type === 'clear') {
+    ds.ballInClear++;
+    if (ds.ballInClear >= d.clearSize) {
+      ds.clearStreak++;
+      ds.ballInClear = 0;
+      setEl('dcMain', ds.clearStreak);
+      setEl('dcBall', 1);
+      if (ds.clearStreak >= d.target) finishDrillSession(true);
+    } else {
+      setEl('dcBall', ds.ballInClear + 1);
+    }
+  }
+}
+
+function drillLPass(zone) {
+  if (zone === 'inner') ds.innerZone++; else ds.outerZone++;
+  setEl('drInner', ds.innerZone); setEl('drOuter', ds.outerZone);
+  if (zone === 'outer') { drillFail(); return; }  // outer zone = failed position = rack reset
+  ds.ballInRack++;
+  setEl('drBall', ds.ballInRack + 1);
+  if (ds.ballInRack >= activeDrill.rackSize) {
+    ds.rackStreak++;
+    ds.ballInRack = 0;
+    setEl('drRacks', ds.rackStreak);
+    setEl('drBall', 1);
+    if (ds.rackStreak >= activeDrill.target) finishDrillSession(true);
+  }
+}
+
+function drillFail() {
+  const d = activeDrill;
+  if (d.type === 'streak') {
+    ds.streak = 0;
+    setEl('dcMain', 0);
+    triggerAudit(d.audit, d.auditSub);
+  } else if (d.type === 'rack') {
+    ds.rackStreak = 0;
+    ds.ballInRack = 0;
+    setEl('drRacks', 0);
+    setEl('drBall', 1);
+  } else if (d.type === 'bilateral') {
+    if (ds.side === 'left') { ds.leftMisses++; ds.leftMade = 0; setEl('dcLeft', 0); }
+    else                    { ds.rightMisses++; ds.rightMade = 0; setEl('dcRight', 0); }
+    if (Math.max(ds.leftMisses, ds.rightMisses) >= d.biasThreshold) {
+      const biasedSide = ds.leftMisses >= ds.rightMisses ? 'LEFT' : 'RIGHT';
+      ds.leftMisses = 0; ds.rightMisses = 0; // reset after flagging
+      triggerAudit(d.biasAudit, `${biasedSide} side has reached the miss threshold. ${d.biasAuditSub}`);
+    }
+  } else if (d.type === 'clear') {
+    ds.clearStreak = 0;
+    ds.ballInClear = 0;
+    setEl('dcMain', 0);
+    setEl('dcBall', 1);
+  }
+}
+
+function drillStatue() { drillFail(); }  // Long Straight self-flag
+
+function quitDrill() {
+  drillRunning = false; activeDrill = null; ds = {};
+  renderDrillList();
+}
+
+function setEl(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+// ── Finish drill session ───────────────────────────────────
+function finishDrillSession(passed) {
+  const d = activeDrill;
+  saveDrillSession({ id: Date.now(), date: dateKey(new Date()), drillId: d.id, passed });
+  const newStreak = getDrillStreak(d.id);
+  const mastered  = newStreak >= 3;
+  drillRunning = false;
+
+  let body;
+  if (passed) {
+    body = `
+      <div class="drill-result">
+        <div class="drill-result-icon">${mastered ? '★' : '✓'}</div>
+        <div class="drill-result-title pass">${mastered ? 'MASTERED' : 'SESSION PASSED'}</div>
+        <div class="drill-result-sub">${mastered
+          ? `Three consecutive sessions cleared.\n${d.name} is yours.`
+          : `${newStreak} of 3 sessions completed.`}</div>
+        <div class="drill-result-streak">${newStreak}</div>
+        <div class="drill-result-streak-lbl">/ 3 SESSION STREAK</div>
+        <button class="drill-result-btn" onclick="quitDrill()">BACK TO DRILLS</button>
+      </div>`;
+  } else {
+    body = `
+      <div class="drill-result">
+        <div class="drill-result-icon">↺</div>
+        <div class="drill-result-title fail">SESSION FAILED</div>
+        <div class="drill-result-sub">Session streak reset to 0.\nReview your process before the next attempt.</div>
+        <button class="drill-result-btn" onclick="quitDrill()">BACK TO DRILLS</button>
+      </div>`;
+  }
+  document.getElementById('drillsContent').innerHTML = body;
+}
+
+// ── Mechanical Audit modal ─────────────────────────────────
+function triggerAudit(cue, sub) {
+  document.getElementById('auditCue').textContent = cue || '';
+  document.getElementById('auditSub').textContent = sub || '';
+  document.getElementById('auditModal').classList.add('show');
+}
+function dismissAudit() {
+  document.getElementById('auditModal').classList.remove('show');
 }
 
 // ═══════════════════════════════════════════════════════════
