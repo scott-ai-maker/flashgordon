@@ -1,1385 +1,661 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#08110d">
-<title>Billiards Strength &amp; Conditioning</title>
-<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Flash Gordon — Pre-Shot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #08110d;
-    --panel: rgba(14, 29, 22, 0.9);
-    --line: rgba(186, 168, 102, 0.22);
-    --text: #f3f0e3;
-    --muted: #aab9ad;
-    --gold: #baa866;
-    --gold-bright: #decb84;
-    --green: #78c18d;
-    --red: #e47766;
-    --orange: #f2a65a;
-    --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
-    --radius: 22px;
+    --gold: #f5c400; --gold-dim: #a87e00;
+    --cyan: #00bfff; --cyan-dim: #005f80;
+    --dark: #080f18; --dark2: #0d1b2a; --dark3: #1a2d42;
+    --red: #ff4444; --text: #e8e8e8; --text-dim: #9ab0c8;
   }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; background:var(--dark); color:var(--text); font-family:’Exo 2’,sans-serif; overflow:hidden; }
 
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    min-height: 100%;
+  /* Grid overlay — matches flashgordonpool.com */
+  body::before { content:’’; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:linear-gradient(rgba(0,191,255,.04) 1px,transparent 0),linear-gradient(90deg,rgba(0,191,255,.04) 1px,transparent 0);
+    background-size:60px 60px; }
+  /* Ambient radial glows */
+  body::after { content:’’; position:fixed; inset:0; pointer-events:none; z-index:0;
     background:
-      radial-gradient(circle at top left, rgba(186, 168, 102, 0.14), transparent 30%),
-      radial-gradient(circle at 85% 10%, rgba(120, 193, 141, 0.12), transparent 25%),
-      linear-gradient(180deg, #0b1611 0%, #08110d 48%, #060c09 100%);
-    color: var(--text);
-    font-family: 'Oxanium', sans-serif;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.65));
-    z-index: 0;
-  }
-
-  .app-shell {
-    position: relative;
-    z-index: 1;
-    width: min(1200px, calc(100% - 28px));
-    margin: 0 auto;
-    padding: 28px 0 40px;
-  }
-
-  .hero {
-    display: grid;
-    grid-template-columns: 1.25fr 0.95fr;
-    gap: 18px;
-    margin-bottom: 18px;
-  }
-
-  .hero-card,
-  .panel,
-  .card,
-  .summary-card,
-  .logic-card {
-    background: linear-gradient(180deg, rgba(16, 33, 25, 0.96), rgba(10, 22, 17, 0.94));
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-
-  .hero-card {
-    padding: 26px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .hero-card::after {
-    content: '';
-    position: absolute;
-    inset: auto -90px -120px auto;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(186, 168, 102, 0.16), transparent 65%);
-    pointer-events: none;
-  }
-
-  .eyebrow,
-  .section-kicker,
-  .tiny-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .hero-title {
-    margin: 10px 0 10px;
-    font-size: clamp(36px, 5.3vw, 68px);
-    line-height: 0.96;
-    letter-spacing: 0.05em;
-  }
-
-  .hero-title .accent {
-    display: block;
-    color: var(--gold-bright);
-  }
-
-  .hero-copy {
-    max-width: 58ch;
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  .hero-copy em {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    color: var(--text);
-  }
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 18px;
-  }
-
-  .summary-card {
-    padding: 16px 18px;
-    background: linear-gradient(180deg, rgba(24, 49, 37, 0.9), rgba(12, 25, 19, 0.92));
-  }
-
-  .summary-value {
-    margin-top: 8px;
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 1;
-  }
-
-  .summary-value.gold { color: var(--gold-bright); }
-  .summary-value.green { color: var(--green); }
-  .summary-value.orange { color: var(--orange); }
-
-  .summary-foot {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .hero-side {
-    display: grid;
-    gap: 18px;
-  }
-
-  .panel { padding: 22px; }
-
-  .date-toolbar,
-  .cadence-row,
-  .section-header,
-  .primary-top {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .toolbar-group,
-  .primary-meta,
-  .combine-actions,
-  .side-switch {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-  }
-
-  input[type='date'],
-  select {
-    appearance: none;
-    border: 1px solid rgba(186, 168, 102, 0.28);
-    border-radius: 14px;
-    background: rgba(7, 16, 12, 0.88);
-    color: var(--text);
-    font: inherit;
-    padding: 11px 14px;
-  }
-
-  button {
-    border: 0;
-    border-radius: 14px;
-    font: inherit;
-    color: var(--text);
-    cursor: pointer;
-    transition: transform 140ms ease, background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
-  }
-
-  button:hover { transform: translateY(-1px); }
-  button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-
-  .btn,
-  .log-btn,
-  .combine-btn,
-  .side-btn {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .btn {
-    padding: 11px 16px;
-    background: linear-gradient(180deg, rgba(186, 168, 102, 0.18), rgba(186, 168, 102, 0.08));
-    border-color: rgba(186, 168, 102, 0.38);
-  }
-
-  .btn.secondary {
-    background: rgba(120, 193, 141, 0.1);
-    border-color: rgba(120, 193, 141, 0.28);
-  }
-
-  .btn.ghost {
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  .beat-bar {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 6px;
-  }
-
-  .beat-dot {
-    height: 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .beat-dot.active {
-    background: linear-gradient(90deg, var(--green), var(--gold-bright));
-    box-shadow: 0 0 16px rgba(120, 193, 141, 0.32);
-  }
-
-  .status-pill,
-  .metric-pill,
-  .drill-tag,
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .status-pill.locked { background: rgba(228, 119, 102, 0.14); color: #ffc6bb; }
-  .status-pill.ready { background: rgba(120, 193, 141, 0.14); color: #cff5d7; }
-  .status-pill.combine { background: rgba(186, 168, 102, 0.16); color: var(--gold-bright); }
-  .metric-pill,
-  .badge { background: rgba(255, 255, 255, 0.04); color: var(--muted); }
-  .badge { color: var(--gold-bright); }
-
-  .layout-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 18px;
-    margin-bottom: 18px;
-  }
-
-  .stack { display: grid; gap: 18px; }
-
-  .section-title,
-  .primary-title,
-  .drill-title {
-    margin: 8px 0 0;
-    letter-spacing: 0.04em;
-  }
-
-  .section-title { font-size: 28px; }
-  .primary-title { font-size: 30px; }
-  .drill-title { font-size: 22px; }
-
-  .section-copy,
-  .drill-copy,
-  .helper-copy,
-  .primary-copy,
-  .audit-copy,
-  .table-copy,
-  .highlight-copy {
-    margin-top: 10px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .card-grid,
-  .summary-grid,
-  .toolbox,
-  .log-grid,
-  .highlight-grid,
-  .stats-row,
-  .flow-list {
-    display: grid;
-    gap: 12px;
-  }
-
-  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .toolbox { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 12px; }
-  .log-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .highlight-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .stats-row { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 12px; }
-
-  .card,
-  .logic-card { padding: 18px; }
-
-  .drill-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
-
-  .stat-box,
-  .toolbox-block,
-  .highlight,
-  .flow-step {
-    padding: 14px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .stat-number,
-  .highlight-value {
-    margin-top: 8px;
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1;
-  }
-
-  .green { color: var(--green); }
-  .gold { color: var(--gold-bright); }
-  .orange { color: var(--orange); }
-
-  .meter {
-    height: 10px;
-    border-radius: 999px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    margin-bottom: 14px;
-  }
-
-  .meter-fill {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--green), var(--gold-bright));
-    transition: width 180ms ease;
-  }
-
-  .toolbox-block label {
-    display: block;
-    margin-bottom: 8px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .log-btn,
-  .combine-btn,
-  .side-btn {
-    padding: 14px 10px;
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .log-btn.clean,
-  .combine-btn.hit { background: rgba(120, 193, 141, 0.14); border-color: rgba(120, 193, 141, 0.32); color: #dcffe4; }
-  .log-btn.pot,
-  .combine-btn.miss { background: rgba(228, 119, 102, 0.12); border-color: rgba(228, 119, 102, 0.28); color: #ffd2ca; }
-  .log-btn.mechanical { background: rgba(242, 166, 90, 0.12); border-color: rgba(242, 166, 90, 0.32); color: #ffe1bf; }
-  .side-btn.active { background: rgba(186, 168, 102, 0.15); border-color: rgba(186, 168, 102, 0.42); color: var(--gold-bright); }
-
-  .audit-banner {
-    display: none;
-    margin-top: 14px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(242, 166, 90, 0.12);
-    border: 1px solid rgba(242, 166, 90, 0.3);
-  }
-
-  .audit-banner.show { display: block; }
-
-  .flow-step {
-    display: grid;
-    grid-template-columns: 42px 1fr;
-    gap: 12px;
-    align-items: start;
-  }
-
-  .step-num {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    background: rgba(186, 168, 102, 0.12);
-    color: var(--gold-bright);
-    font-weight: 800;
-  }
-
-  .flow-step strong {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 15px;
-    letter-spacing: 0.03em;
-  }
-
-  .table-wrap { overflow-x: auto; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 720px;
-  }
-
-  th,
-  td {
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: left;
-    font-size: 14px;
-  }
-
-  th {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  tr:last-child td { border-bottom: 0; }
-  .combine-table td:last-child,
-  .combine-table th:last-child { text-align: right; }
-  .hit-text { color: var(--green); font-weight: 700; }
-  .miss-text { color: var(--red); font-weight: 700; }
-
-  pre {
-    margin: 12px 0 0;
-    padding: 16px;
-    border-radius: 18px;
-    overflow-x: auto;
-    background: rgba(7, 16, 12, 0.92);
-    color: #dcf5e3;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-  }
-
-  .toast {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    width: min(420px, calc(100% - 36px));
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(9, 20, 15, 0.94);
-    border: 1px solid rgba(242, 166, 90, 0.36);
-    box-shadow: var(--shadow);
-    transform: translateY(16px);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 180ms ease, opacity 180ms ease;
-    z-index: 4;
-  }
-
-  .toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .toast-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--orange);
-  }
-
-  .toast-body {
-    margin-top: 8px;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 980px) {
-    .hero,
-    .layout-grid,
-    .card-grid,
-    .highlight-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .app-shell { width: min(100% - 18px, 100%); padding-top: 18px; }
-    .hero-card,
-    .panel,
-    .card,
-    .logic-card,
-    .summary-card { padding: 18px; }
-    .summary-grid,
-    .toolbox,
-    .log-grid,
-    .stats-row { grid-template-columns: 1fr; }
-    .hero-title { font-size: 42px; }
-  }
+      radial-gradient(ellipse at 50% 0%,rgba(0,191,255,0.07) 0%,transparent 55%),
+      radial-gradient(ellipse at 85% 100%,rgba(245,196,0,0.06) 0%,transparent 45%); }
+
+.app { height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 20px; position:relative; z-index:1; }
+
+.bpm-badge { position:absolute; top:20px; right:20px; font-family:’Share Tech Mono’,monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); text-align:right; line-height:1.6; }
+.bpm-badge span { display:block; font-size:18px; letter-spacing:1px; color:var(--cyan); }
+
+.title-block { text-align:center; margin-bottom:28px; }
+.title-sub { font-family:’Share Tech Mono’,monospace; font-size:9px; letter-spacing:6px; color:var(--cyan); margin-bottom:6px; opacity:0.7; }
+h1 { font-family:’Orbitron’,sans-serif; font-weight:900; font-size:clamp(32px,10vw,62px); letter-spacing:6px; line-height:1;
+  background:linear-gradient(160deg,var(--gold) 0%,#fff8c0 45%,var(--gold) 75%,var(--gold-dim) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(245,196,0,0.5)) drop-shadow(0 0 40px rgba(245,196,0,0.25)); }
+
+.phase-display { width:100%; max-width:420px; background:rgba(13,27,42,0.85); border:1px solid rgba(0,191,255,0.2); border-radius:6px; padding:20px 24px; margin-bottom:20px; min-height:120px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; transition:min-height 0.2s;
+  box-shadow:0 0 20px rgba(0,191,255,.08), inset 0 0 40px rgba(0,191,255,.02); }
+.phase-display::before { content:’’; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--bar-color,var(--cyan)),transparent); opacity:0.6; }
+
+.phase-label { font-family:’Share Tech Mono’,monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:8px; text-transform:uppercase; }
+.phase-cue { font-family:’Orbitron’,sans-serif; font-weight:700; font-size:clamp(18px,5vw,28px); letter-spacing:2px; color:var(--text); line-height:1.2; transition:color 0.15s; }
+.phase-cue.gold { color:var(--gold); text-shadow:0 0 20px rgba(245,196,0,.6),0 0 40px rgba(245,196,0,.3); }
+.phase-cue.cyan { color:var(--cyan); text-shadow:0 0 20px rgba(0,191,255,.6),0 0 40px rgba(0,191,255,.3); }
+.phase-cue.red  { color:var(--red);  text-shadow:0 0 20px rgba(255,68,68,.6); }
+.phase-detail { font-family:’Exo 2’,sans-serif; font-size:12px; letter-spacing:0.5px; color:var(--text-dim); margin-top:6px; font-weight:400; }
+.wisdom-sub { font-family:’Exo 2’,sans-serif; font-size:12px; letter-spacing:0.5px; color:rgba(245,196,0,0.75); margin-top:8px; font-style:italic; line-height:1.5; display:none; }
+.wisdom-sub.on { display:block; }
+
+.beat-row { display:flex; gap:10px; margin-bottom:20px; }
+.beat-dot { width:12px; height:12px; border-radius:50%; background:var(--dark3); border:1px solid rgba(0,191,255,0.15); transition:all 0.05s; }
+.beat-dot.on-gold { background:var(--gold); box-shadow:0 0 20px rgba(245,196,0,.4),0 0 40px rgba(245,196,0,.2); transform:scale(1.3); }
+.beat-dot.on-cyan { background:var(--cyan); box-shadow:0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2); transform:scale(1.3); }
+.beat-dot.on-red  { background:var(--red);  box-shadow:0 0 20px rgba(255,68,68,.4); transform:scale(1.3); }
+.beat-dot.on-     { background:var(--text); box-shadow:0 0 8px rgba(232,232,232,0.4); transform:scale(1.3); }
+
+.progress-track { width:100%; max-width:420px; height:2px; background:rgba(0,191,255,0.1); border-radius:1px; margin-bottom:24px; overflow:hidden; }
+.progress-fill  { height:100%; background:linear-gradient(90deg,var(--cyan),var(--gold)); width:0%; transition:width 0.15s linear; }
+
+.play-btn {
+width:120px; height:120px; border-radius:50%;
+background: radial-gradient(circle at 38% 35%, #ffe84d, #f5c400 45%, #a87e00 100%);
+border: 3px solid rgba(245,196,0,0.4);
+box-shadow: 0 4px 0 rgba(90,65,0,0.8), 0 6px 30px rgba(245,196,0,0.35), 0 0 20px rgba(245,196,0,.4),0 0 40px rgba(245,196,0,.2), inset 0 2px 4px rgba(255,255,200,0.4);
+cursor:pointer; display:flex; align-items:center; justify-content:center;
+position:relative; transition:transform 0.1s, box-shadow 0.1s; outline:none;
+}
+.play-btn:hover { transform:scale(1.04); box-shadow: 0 4px 0 rgba(90,65,0,0.8), 0 8px 40px rgba(245,196,0,0.5), 0 0 40px rgba(245,196,0,.5),0 0 60px rgba(245,196,0,.25), inset 0 2px 4px rgba(255,255,200,0.4); }
+.play-btn:active { transform:scale(0.96) translateY(3px); box-shadow: 0 1px 0 rgba(90,65,0,0.8), 0 3px 12px rgba(245,196,0,0.3), inset 0 2px 4px rgba(255,255,200,0.2); }
+.play-btn.playing {
+background: radial-gradient(circle at 38% 35%, #1a2a3a, #0d1b2a 45%, #080f18 100%);
+border: 3px solid rgba(0,191,255,0.3);
+box-shadow: 0 4px 0 #000, 0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2), inset 0 2px 4px rgba(255,255,255,0.05);
+animation: pulse 0.789s ease-in-out infinite;
+}
+@keyframes pulse { 0%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 0 rgba(0,191,255,0.5)} 70%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 20px rgba(0,191,255,0)} 100%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 0 rgba(0,191,255,0)} }
+.play-icon { font-size:48px; color:#1a1000; margin-left:6px; line-height:1; filter:drop-shadow(0 1px 0 rgba(255,255,150,0.5)); }
+.stop-icon { width:28px; height:28px; background:var(--cyan); border-radius:3px; display:none; box-shadow:0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2); }
+.play-btn.playing .play-icon { display:none; }
+.play-btn.playing .stop-icon { display:block; }
+
+.btn-label  { margin-top:10px; font-family:’Share Tech Mono’,monospace; font-size:10px; letter-spacing:4px; color:var(--text-dim); }
+.idle-hint  { font-family:’Share Tech Mono’,monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); margin-top:14px; opacity:0.5; }
+.done-flash { position:fixed; inset:0; background:rgba(245,196,0,0.05); pointer-events:none; opacity:0; transition:opacity 0.1s; z-index:50; }
+.done-flash.show { opacity:1; }
+
+.bpm-control { display:flex; align-items:center; margin-top:16px; }
+.bpm-adj { font-family:’Share Tech Mono’,monospace; font-size:16px; color:var(--cyan); background:transparent; border:1px solid rgba(0,191,255,0.3); width:30px; height:30px; cursor:pointer; transition:all 0.2s; outline:none; display:flex; align-items:center; justify-content:center; line-height:1; }
+.bpm-adj:first-child { border-radius:15px 0 0 15px; }
+.bpm-adj:last-child  { border-radius:0 15px 15px 0; }
+.bpm-adj:hover:not(:disabled) { color:var(--gold); border-color:rgba(245,196,0,0.5); background:rgba(245,196,0,0.05); }
+.bpm-adj:disabled { opacity:0.3; cursor:default; }
+.bpm-val { font-family:’Share Tech Mono’,monospace; font-size:11px; letter-spacing:3px; color:var(--cyan); border-top:1px solid rgba(0,191,255,0.3); border-bottom:1px solid rgba(0,191,255,0.3); padding:0 14px; height:30px; display:flex; align-items:center; min-width:82px; justify-content:center; }
+
+.cat-filter { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:10px; max-width:360px; }
+.cat-btn { font-family:’Share Tech Mono’,monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); background:transparent; border:1px solid rgba(0,191,255,0.15); border-radius:3px; padding:4px 8px; cursor:pointer; transition:all 0.2s; outline:none; }
+.cat-btn.active { color:var(--gold); border-color:rgba(245,196,0,0.4); }
+.cat-btn:hover { border-color:rgba(0,191,255,0.4); color:var(--text); }
+
+.shot-counter { position:absolute; top:20px; left:20px; font-family:’Share Tech Mono’,monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); text-align:left; line-height:1.6; }
+.shot-counter span { display:block; font-size:18px; letter-spacing:1px; color:var(--cyan); }
 </style>
+
 </head>
 <body>
-  <div class="app-shell">
-    <section class="hero">
-      <div class="hero-card">
-        <div class="eyebrow">Orthodox Fundamentals / Wilson-Briesath Discipline</div>
-        <h1 class="hero-title">Billiards <span class="accent">Strength &amp; Conditioning</span></h1>
-        <p class="hero-copy">
-          Restoration is tracked through <em>discipline under structure</em>: daily baselines first, then the correct block for the day, all on a fixed 10-beat cadence at 60 BPM.
-          A made ball with poor mechanics still logs as failure.
-        </p>
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="tiny-label">Today's Block</div>
-            <div class="summary-value gold" id="summaryBlock">L-Drill</div>
-            <div class="summary-foot" id="summaryMetric">5 consecutive racks</div>
-          </div>
-          <div class="summary-card">
-            <div class="tiny-label">Primary Unlock</div>
-            <div class="summary-value" id="summaryUnlock">Locked</div>
-            <div class="summary-foot" id="summaryUnlockCopy">Finish both daily minimums first.</div>
-          </div>
-          <div class="summary-card">
-            <div class="tiny-label">Restoration Proxy</div>
-            <div class="summary-value green" id="summaryRestoration">0%</div>
-            <div class="summary-foot">Weighted from weekly baseline completion, primary block adherence, and focus score.</div>
-          </div>
-          <div class="summary-card">
-            <div class="tiny-label">Weekly Focus Score</div>
-            <div class="summary-value orange" id="summaryFocus">0%</div>
-            <div class="summary-foot">Percentage of logged reps with no mechanical self-flag.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-side">
-        <div class="panel">
-          <div class="date-toolbar">
-            <div>
-              <div class="section-kicker">Training Calendar</div>
-              <div class="section-copy">Change the date to preview how the rotation, combine scoring, and stabilization logic behave across the week.</div>
-            </div>
-            <div class="toolbar-group">
-              <input type="date" id="trainingDate">
-              <button class="btn ghost" id="todayBtn">Today</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="cadence-row">
-            <div>
-              <div class="section-kicker">60 BPM System</div>
-              <div class="section-copy">Every drill is paced to a 10-beat cycle. Beat 10 is evaluation, not celebration.</div>
-            </div>
-            <button class="btn secondary" id="cadenceBtn">Play 10 Beats</button>
-          </div>
-          <div class="beat-bar" id="beatBar"></div>
-          <div class="helper-copy" id="cadenceStatus">Idle. Start cadence before each rep block.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="layout-grid">
-      <div class="stack">
-        <div class="panel">
-          <div class="section-header">
-            <div>
-              <div class="section-kicker">Daily Minimums</div>
-              <h2 class="section-title">Mandatory Baselines</h2>
-              <p class="section-copy">Stop Shot Ladder must be completed in full. Long Straight-In must reach 8/10 makes before the primary block unlocks.</p>
-            </div>
-            <div class="status-pill locked" id="baselineStatus">Locked</div>
-          </div>
-
-          <div class="toolbox">
-            <div class="toolbox-block">
-              <label for="mechanicalReason">Mechanical failure label</label>
-              <select id="mechanicalReason">
-                <option value="Vision Center">Vision Center</option>
-                <option value="Elbow Stillness">Elbow Stillness</option>
-                <option value="Head Drift">Head Drift</option>
-                <option value="Tempo Rush">Tempo Rush</option>
-              </select>
-            </div>
-            <div class="toolbox-block">
-              <label for="pottingReason">Potting failure label</label>
-              <select id="pottingReason">
-                <option value="Line Miss">Line Miss</option>
-                <option value="Speed Error">Speed Error</option>
-                <option value="Touch Error">Touch Error</option>
-                <option value="Pattern Error">Pattern Error</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="card-grid">
-            <article class="card">
-              <div class="drill-top">
-                <div>
-                  <div class="drill-tag">Baseline 1</div>
-                  <h3 class="drill-title">Stop Shot Ladder</h3>
-                </div>
-                <span class="metric-pill">3 rotations / 15 shots</span>
-              </div>
-              <p class="drill-copy">Requirement: the cue ball must finish within 0.5 inches of impact. Precision matters more than the pocket.</p>
-              <div class="stats-row">
-                <div class="stat-box"><span class="tiny-label">Attempts</span><div class="stat-number" id="stopAttempts">0</div></div>
-                <div class="stat-box"><span class="tiny-label">Precise</span><div class="stat-number green" id="stopPrecise">0</div></div>
-                <div class="stat-box"><span class="tiny-label">Rotations</span><div class="stat-number gold" id="stopRotations">0/3</div></div>
-              </div>
-              <div class="meter"><div class="meter-fill" id="stopMeter"></div></div>
-              <div class="log-grid">
-                <button class="log-btn clean" data-log="stop-shot:success">Clean Stop</button>
-                <button class="log-btn pot" data-log="stop-shot:pot">Distance Fail</button>
-                <button class="log-btn mechanical" data-log="stop-shot:mechanical">Self-Flag Form</button>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="drill-top">
-                <div>
-                  <div class="drill-tag">Baseline 2</div>
-                  <h3 class="drill-title">Long Straight-In</h3>
-                </div>
-                <span class="metric-pill">8 / 10 unlocks day</span>
-              </div>
-              <p class="drill-copy">Requirement: 10 long straight-ins. Potting is required here, but mechanical self-flags still count as failure even on a make.</p>
-              <div class="stats-row">
-                <div class="stat-box"><span class="tiny-label">Attempts</span><div class="stat-number" id="longAttempts">0</div></div>
-                <div class="stat-box"><span class="tiny-label">Makes</span><div class="stat-number green" id="longMakes">0</div></div>
-                <div class="stat-box"><span class="tiny-label">Unlock Pace</span><div class="stat-number gold" id="longPace">0%</div></div>
-              </div>
-              <div class="meter"><div class="meter-fill" id="longMeter"></div></div>
-              <div class="log-grid">
-                <button class="log-btn clean" data-log="long-straight:success">Clean Make</button>
-                <button class="log-btn pot" data-log="long-straight:pot">Potting Fail</button>
-                <button class="log-btn mechanical" data-log="long-straight:mechanical">Self-Flag Form</button>
-              </div>
-            </article>
-          </div>
-          <div class="audit-banner" id="auditBanner">
-            <div class="tiny-label">Mechanical Audit</div>
-            <div class="audit-copy">Audit: Check Vision Center and Elbow Stillness.</div>
-          </div>
-        </div>
-
-        <div class="panel" id="primaryPanel"></div>
-      </div>
-
-      <div class="stack">
-        <div class="panel">
-          <div class="section-kicker">Logging UX</div>
-          <h2 class="section-title">Mechanical vs Potting Failure</h2>
-          <div class="flow-list">
-            <div class="flow-step">
-              <div class="step-num">1</div>
-              <div>
-                <strong>Start each rep with a clean expectation.</strong>
-                <div class="helper-copy">Only the clean button advances a streak. This keeps the app aligned with form-over-result.</div>
-              </div>
-            </div>
-            <div class="flow-step">
-              <div class="step-num">2</div>
-              <div>
-                <strong>Use Potting Failure for result errors only.</strong>
-                <div class="helper-copy">Misses, speed losses, and pattern choices reset the streak but do not reduce focus score unless you also self-flag mechanics.</div>
-              </div>
-            </div>
-            <div class="flow-step">
-              <div class="step-num">3</div>
-              <div>
-                <strong>Use Mechanical Self-Flag even on a made ball.</strong>
-                <div class="helper-copy">Select the reason first, then self-flag. That rep is logged as a failure, focus score drops, and three consecutive failures trigger the audit prompt.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="logic-card">
-          <div class="section-kicker">Weekly Rotation Logic</div>
-          <h2 class="section-title">Implementation Sketch</h2>
-          <pre id="logicBlock"></pre>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" style="margin-bottom: 18px;">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Sunday Combine</div>
-          <h2 class="section-title">Scorecard</h2>
-          <p class="section-copy">If a drill's Pro Metric is hit on three consecutive Sundays, the drill is marked Stabilized. Use the table on Sunday or when reviewing prior Sundays.</p>
-        </div>
-        <div class="status-pill combine" id="combineStatus">Review Mode</div>
-      </div>
-      <div class="table-wrap">
-        <table class="combine-table">
-          <thead>
-            <tr>
-              <th>Drill</th>
-              <th>Metric</th>
-              <th>Status</th>
-              <th>Sunday Streak</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="combineBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="section-header">
-        <div>
-          <div class="section-kicker">Weekly Review</div>
-          <h2 class="section-title">Data Summary Table</h2>
-          <p class="section-copy table-copy">Use this as the weekly review format: block assignment, baseline compliance, unlock state, best primary output, focus score, audit count, and combine status.</p>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Block</th>
-              <th>Baselines</th>
-              <th>Unlock</th>
-              <th>Primary Result</th>
-              <th>Focus Score</th>
-              <th>Audits</th>
-              <th>Sunday Combine</th>
-            </tr>
-          </thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
-    </section>
+<div class="app">
+  <div class="shot-counter"><span id="shotCountNum">0</span>SHOTS</div>
+  <div class="bpm-badge"><span id="bpmBadgeNum">76</span>BPM · 4/4</div>
+  <div class="title-block">
+    <div class="title-sub">Pre-Shot Routine</div>
+    <h1>FLASH GORDON</h1>
   </div>
-
-  <div class="toast" id="toast">
-    <div class="toast-title" id="toastTitle">Mechanical Audit</div>
-    <div class="toast-body" id="toastBody">Audit: Check Vision Center and Elbow Stillness.</div>
+  <div class="phase-display" id="phaseDisplay">
+    <div class="phase-label"  id="phaseLabel">READY</div>
+    <div class="phase-cue"    id="phaseCue">Hit play before your shot</div>
+    <div class="phase-detail" id="phaseDetail"></div>
+    <div class="wisdom-sub"   id="wisdomSub"></div>
   </div>
+  <div class="beat-row">
+    <div class="beat-dot" id="d0"></div>
+    <div class="beat-dot" id="d1"></div>
+    <div class="beat-dot" id="d2"></div>
+    <div class="beat-dot" id="d3"></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <button class="play-btn" id="playBtn" onclick="togglePlay()" aria-label="Play">
+    <span class="play-icon">&#9654;</span>
+    <span class="stop-icon"></span>
+  </button>
+  <div class="btn-label" id="btnLabel">PLAY</div>
+  <div class="idle-hint" id="idleHint">tap before each shot</div>
+  <div class="bpm-control">
+    <button class="bpm-adj" id="bpmDn" onclick="adjustBPM(-5)">−</button>
+    <span class="bpm-val" id="bpmVal">76 BPM</span>
+    <button class="bpm-adj" id="bpmUp" onclick="adjustBPM(+5)">+</button>
+  </div>
+  <div class="cat-filter" id="catFilter">
+    <button class="cat-btn active" data-cat="MECHANICS"   onclick="toggleCat('MECHANICS')">MECH</button>
+    <button class="cat-btn active" data-cat="MINDSET"     onclick="toggleCat('MINDSET')">MINDSET</button>
+    <button class="cat-btn active" data-cat="POSITION"    onclick="toggleCat('POSITION')">POS</button>
+    <button class="cat-btn active" data-cat="SLIP STROKE" onclick="toggleCat('SLIP STROKE')">SLIP</button>
+    <button class="cat-btn active" data-cat="PRE-ROUTINE" onclick="toggleCat('PRE-ROUTINE')">PRE</button>
+  </div>
+</div>
+<div class="done-flash" id="doneFlash"></div>
 
 <script>
-  const STORAGE_KEY = 'bsc-restoration-v1';
-  const CADENCE_BEATS = 10;
-  const BPM = 60;
-  const BEAT_MS = 60000 / BPM;
+// ═══════════════════════════════════════════════════════════
+// TEMPO — exact, never rounded
+// ═══════════════════════════════════════════════════════════
+let BPM     = 76;
+let BEAT_MS = 60000 / BPM;   // 789.4736842... ms
 
-  const DRILLS = {
-    'stop-shot': { id: 'stop-shot', name: 'Stop Shot Ladder', metric: '15 precise stops / 3 rotations' },
-    'long-straight': { id: 'long-straight', name: 'Long Straight-In', metric: '8 makes in 10 attempts' },
-    'l-drill': { id: 'l-drill', name: 'L-Drill', metric: '5 consecutive racks', target: 5 },
-    'rail-cut': { id: 'rail-cut', name: 'Rail Cut Drill', metric: '20 consecutive makes, 10L / 10R', target: 10 },
-    'mother': { id: 'mother', name: 'Mother Drill', metric: '3 consecutive full clears', target: 3 }
+function adjustBPM(delta) {
+  if (running) return;  // don't change mid-routine
+  BPM     = Math.min(120, Math.max(50, BPM + delta));
+  BEAT_MS = 60000 / BPM;
+  document.getElementById('bpmVal').textContent     = BPM + ' BPM';
+  document.getElementById('bpmBadgeNum').textContent = BPM;
+  document.getElementById('bpmDn').disabled = BPM <= 50;
+  document.getElementById('bpmUp').disabled = BPM >= 120;
+}
+
+// ═══════════════════════════════════════════════════════════
+// WISDOM LIBRARY
+// ═══════════════════════════════════════════════════════════
+const WISDOM = [
+  { cat:'MECHANICS', short:'Still Elbow',        sub:'upper arm locked — only forearm moves',       speak:'Still elbow. Only the forearm moves.' },
+  { cat:'MECHANICS', short:'Grip Like a Bird',   sub:'gentle but secure — firm enough not to drop', speak:'Hold the cue like a bird. Gentle but secure.' },
+  { cat:'MECHANICS', short:'Cue Room',           sub:'full extension behind — no short backswing',  speak:'Make sure you have plenty of room for the cue.' },
+  { cat:'MECHANICS', short:'Level Cue',          sub:'shaft parallel to the cloth',                 speak:'Keep the cue level.' },
+  { cat:'MECHANICS', short:'Bridge Length',      sub:'8 to 10 inches — same every shot',            speak:'Check your bridge length. Eight to ten inches.' },
+  { cat:'MECHANICS', short:'Head Down',          sub:'chin close to cue — stay down through shot',  speak:'Head down. Chin close to the cue.' },
+  { cat:'MECHANICS', short:'Follow Through',     sub:'drive through the cue ball, not to it',       speak:'Follow through. Drive past the cue ball.' },
+  { cat:'MECHANICS', short:'Back Foot Weight',   sub:'60% weight back — stable base',               speak:'Weight on your back foot. Stay grounded.' },
+  { cat:'MINDSET',   short:'One Shot at a Time', sub:'this shot only — clear everything else',      speak:'One shot at a time. Nothing else exists.' },
+  { cat:'MINDSET',   short:'Commit Fully',       sub:'decide, then execute — no second guessing',   speak:'Commit fully. The decision is made.' },
+  { cat:'MINDSET',   short:'Trust the Routine',  sub:'you have trained this — let it happen',       speak:'Trust the routine. You have trained this.' },
+  { cat:'MINDSET',   short:'Breathe Out',        sub:'exhale fully before the final stroke',        speak:'Breathe out before you shoot.' },
+  { cat:'MINDSET',   short:'See the Line',       sub:'visualize the full path before stepping in',  speak:'See the full line before you step in.' },
+  { cat:'MINDSET',   short:'Slow is Smooth',     sub:'smooth tempo beats forced power every time',  speak:'Slow is smooth. Smooth is accurate.' },
+  { cat:'MINDSET',   short:'Play the Shot',      sub:'not the outcome — execute, then release',     speak:'Play the shot, not the result.' },
+  { cat:'POSITION',  short:'Plan Your Leave',    sub:'know where cue ball ends up before you shoot',speak:'Plan your leave. Where is the cue ball going?' },
+  { cat:'POSITION',  short:'Speed Control',      sub:'pace beats spin — soft touch wins games',     speak:'Speed control. Soft touch wins games.' },
+  { cat:'POSITION',  short:'Natural Angle',      sub:'use the angle the table gives you',           speak:'Use the natural angle. Work with the table.' },
+
+  // ── MECHANICS — advanced ──────────────────────────────────────────────────────
+  { cat:'MECHANICS', short:'Dominant Eye',        sub:'align your dominant eye over the shot line',   speak:'Dominant eye over the line. Sight it the same way every time.' },
+  { cat:'MECHANICS', short:'Straight Back Swing', sub:'back swing must be as straight as the forward', speak:'Straight back swing. It matters as much as the forward stroke.' },
+  { cat:'MECHANICS', short:'Grip Hand Relaxed',   sub:'cradle the cue — tension kills the stroke',    speak:'Relax the grip hand. Cradle it, do not squeeze it.' },
+  { cat:'MECHANICS', short:'Tip on Center',       sub:'find center ball before adding spin',           speak:'Strike center ball first. Master that before adding spin.' },
+  { cat:'MECHANICS', short:'Chin on Cue',         sub:'lower your chin toward the cue for alignment', speak:'Get your chin down toward the cue. See the line clearly.' },
+  { cat:'MECHANICS', short:'Pause at Address',    sub:'be completely still before the final stroke',   speak:'Be completely still at address before you pull the trigger.' },
+  { cat:'MECHANICS', short:'Chalk Every Shot',    sub:'chalk is your trigger — it starts the routine', speak:'Chalk up. It tells your brain the routine has begun.' },
+  { cat:'MECHANICS', short:'Vision Center',       sub:'position your head so your vision center aligns', speak:'Position your vision center directly over the shot line.' },
+  { cat:'MECHANICS', short:'No Steering',         sub:'once committed, let the stroke go — no guiding', speak:'Do not steer the cue. Commit and let it go.' },
+  { cat:'MECHANICS', short:'Feet Outside Shoulder', sub:'feet just outside shoulder width — stable base', speak:'Feet just outside shoulder width. Build a stable base.' },
+
+  // ── MINDSET — advanced ────────────────────────────────────────────────────────
+  { cat:'MINDSET',   short:'Respect Every Shot',  sub:'there is no such thing as an easy shot',       speak:'Respect every shot. There is no such thing as an easy one.' },
+  { cat:'MINDSET',   short:'Process Over Outcome', sub:'focus on execution, not the result',           speak:'Focus on the process. The outcome takes care of itself.' },
+  { cat:'MINDSET',   short:'Reset After a Miss',  sub:'shortest emotional recovery wins matches',      speak:'Reset immediately after a miss. Zero carryover.' },
+  { cat:'MINDSET',   short:'No Indecision',       sub:'most shots are missed because of indecision',  speak:'Decide standing up. No second guessing once you are down.' },
+  { cat:'MINDSET',   short:'Get Up and Reset',    sub:'if something feels wrong, stand up and restart', speak:'If it does not feel right, get up and start over.' },
+  { cat:'MINDSET',   short:'Embrace Pressure',    sub:'pressure is a privilege — you earned this shot', speak:'Embrace the pressure. You earned this shot.' },
+  { cat:'MINDSET',   short:'Play Your Game',      sub:'do the highest percentage shot YOU know how to make', speak:'Play within your abilities. Do what you know how to do.' },
+  { cat:'MINDSET',   short:'Deep Breath',         sub:'one deep exhale resets the nervous system',    speak:'Take one deep breath. Exhale fully. Reset the body.' },
+  { cat:'MINDSET',   short:'Still Eyes',          sub:'clear mind, still eyes — then execute',        speak:'Clear mind. Still eyes. Then execute.' },
+  { cat:'MINDSET',   short:'Visualize First',     sub:'see the entire shot in your mind before stepping in', speak:'See the full shot before you move. Ball path, contact, leave.' },
+  { cat:'MINDSET',   short:'No Lazy Shots',       sub:'apply the same focus to easy shots as hard ones', speak:'No lazy shots. Give every ball the same respect.' },
+  { cat:'MINDSET',   short:'You Are the Opponent', sub:'your real competition is yourself at the table', speak:'Forget your opponent. Your only competition is yourself.' },
+
+  // ── POSITION — advanced ───────────────────────────────────────────────────────
+  { cat:'POSITION',  short:'Cue Ball Path',       sub:'know where the cue ball travels after contact', speak:'Know the cue ball path before you shoot. See it travel.' },
+  { cat:'POSITION',  short:'Think Three Ahead',   sub:'plan three shots ahead minimum',               speak:'Think three shots ahead. Know your route before you start.' },
+  { cat:'POSITION',  short:'Avoid the Rail',      sub:'keep the cue ball off the rail when possible', speak:'Keep the cue ball off the rail. Open positions win games.' },
+  { cat:'POSITION',  short:'Speed Over Spin',     sub:'pace controls position better than english',   speak:'Speed controls position better than spin. Learn the pace.' },
+  { cat:'POSITION',  short:'Ghost Ball',          sub:'visualize the ghost ball at the contact point', speak:'Visualize the ghost ball at the contact point. Aim for its center.' },
+  { cat:'POSITION',  short:'90 Degree Rule',      sub:'stun shots — cue ball separates at 90 degrees', speak:'Remember the ninety degree rule. Stun shots split at ninety.' },
+  { cat:'POSITION',  short:'Clear the Path',      sub:'pocket balls that open routes for the others', speak:'Clear the path first. Pocket balls that open your route.' },
+  { cat:'POSITION',  short:'Cluster Strategy',    sub:'identify trouble clusters early and plan around them', speak:'Find the trouble clusters early. Have a plan before you run.' },
+  { cat:'POSITION',  short:'Soft Touch Wins',     sub:'finesse beats power on position play',         speak:'Soft touch wins games. You can not finesse a ball you overhit.' },
+  { cat:'POSITION',  short:'Center Ball First',   sub:'master center ball control before using spin', speak:'Master center ball. It is the foundation of cue ball control.' },
+
+  // ── SLIP STROKE ───────────────────────────────────────────────────────────────
+  { cat:'SLIP STROKE', short:'Feather Grip',        sub:'near-zero pressure during the slip — let it go',  speak:'Feather grip on the slip. Let the cue go. Trust it.' },
+  { cat:'SLIP STROKE', short:'Match the Warm-Ups',  sub:'final stroke must feel identical to practice strokes', speak:'Make the throw feel exactly like your warm-up strokes. No difference.' },
+  { cat:'SLIP STROKE', short:'Stay Down Through It', sub:'do not rise on the throw — stay down until the pocket', speak:'Stay down through the throw. Do not come up early.' },
+  { cat:'SLIP STROKE', short:'Release Then Catch',  sub:'release flows into the catch — one smooth motion', speak:'Release and catch. One smooth motion, no jab.' },
+  { cat:'SLIP STROKE', short:'Grip After Contact',  sub:'regrip naturally completes after the cue ball is struck', speak:'Let the grip come back naturally after contact. Do not force it.' },
+  { cat:'SLIP STROKE', short:'Straight Slip Back',  sub:'the slip back must be straight — any angle kills the line', speak:'Slip straight back. Any angle off line will kill the shot.' },
+  { cat:'SLIP STROKE', short:'Wrist Loose',         sub:'loose wrist allows the slip to flow through freely', speak:'Keep the wrist loose. A tight wrist blocks the slip.' },
+  { cat:'SLIP STROKE', short:'Same Range of Motion', sub:'slip keeps your arm in the same range as warm-ups', speak:'The slip keeps your arm in the same range of motion as every practice stroke.' },
+  { cat:'SLIP STROKE', short:'No Grip Change',      sub:'grip position on the cue should not jump at release', speak:'No grip jump on the release. Let it slide, not lurch.' },
+  { cat:'SLIP STROKE', short:'Cue Lengthens',       sub:'the slip effectively extends your reach on the final stroke', speak:'Feel the cue lengthen through the shot. That is the slip working.' },
+
+  // ── PRE-ROUTINE ───────────────────────────────────────────────────────────────
+  { cat:'PRE-ROUTINE', short:'Chalk First',         sub:'chalk is your trigger — it starts the routine',       speak:'Chalk up first. It tells your brain the routine has begun.' },
+  { cat:'PRE-ROUTINE', short:'Decide Standing',     sub:'commit to shot, speed, and leave before stepping in', speak:'Make your decision standing up. Speed, spin, leave. All of it.' },
+  { cat:'PRE-ROUTINE', short:'Commit Before Down',  sub:'no changing your mind once you are on the shot',      speak:'Commit before you get down. No second guessing from the bridge.' },
+  { cat:'PRE-ROUTINE', short:'Get Up and Reset',    sub:'if anything feels wrong, stand up and start over',    speak:'If it does not feel right, stand up and start over. No shame in it.' },
+  { cat:'PRE-ROUTINE', short:'Survey the Table',    sub:'know your leave before you chalk',                    speak:'Survey the table first. Know exactly where that cue ball is going.' },
+  { cat:'PRE-ROUTINE', short:'Pick Your Target',    sub:'find the smallest possible target on the object ball', speak:'Find your smallest possible target on the object ball before stepping in.' },
+  { cat:'PRE-ROUTINE', short:'No Rushing',          sub:'pressure makes you rush — the routine is the cure',   speak:'Do not rush. The routine exists precisely for moments of pressure.' },
+  { cat:'PRE-ROUTINE', short:'Same Every Time',     sub:'identical routine in practice and competition',       speak:'Same routine every time. Practice and competition. No exceptions.' },
+];
+// ── CATEGORY FILTER ───────────────────────────────────────
+const ALL_CATS = ['MECHANICS','MINDSET','POSITION','SLIP STROKE','PRE-ROUTINE'];
+let enabledCats = new Set(ALL_CATS);
+
+function toggleCat(cat) {
+  if (running) return;
+  if (enabledCats.has(cat)) {
+    if (enabledCats.size === 1) return;   // keep at least one active
+    enabledCats.delete(cat);
+  } else {
+    enabledCats.add(cat);
+  }
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.classList.toggle('active', enabledCats.has(btn.dataset.cat));
+  });
+  wisdomDeck = [];  // reset deck so next draw respects new filter
+}
+
+// Shuffled deck — every cue plays once before any repeats
+let wisdomDeck = [];
+function getShuffledWisdom() {
+  if (wisdomDeck.length === 0) {
+    // Build filtered pool, fall back to all if somehow empty
+    let pool = WISDOM.map((_, i) => i).filter(i => enabledCats.has(WISDOM[i].cat));
+    if (pool.length === 0) pool = WISDOM.map((_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    wisdomDeck = pool;
+  }
+  return WISDOM[wisdomDeck.pop()];
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEQUENCE
+// ms    = exact duration of this step in milliseconds
+// click = 'hi'|'mid'|'soft'|'slow'|'shoot'|null
+// speak = string | null
+// color = 'gold'|'cyan'|'red'|''
+// isWisdom = true shows the sub-detail line
+// ═══════════════════════════════════════════════════════════
+function buildSequence() {
+  const B  = BEAT_MS;
+  const B2 = BEAT_MS * 2;
+  const w  = getShuffledWisdom();
+
+  return [
+    //  0  PRE-SHOT WISDOM  (4 beats)
+    { ms:B*4, phase:'PRE-SHOT', label:w.cat,         cue:w.short,         detail:w.sub,                              color:'gold', click:null,    speak:w.speak,                      isWisdom:true  },
+    //  1  CENTER ON THE LINE (4 beats)
+    { ms:B*4, phase:'PHASE 0',  label:'ALIGN',        cue:'Center on the Line', detail:'align your body to the shot line', color:'cyan', click:'soft',  speak:'Decision made. Center on the line.',        isWisdom:false },
+    //  2  RIGHT FOOT
+    { ms:B,   phase:'PHASE 1',  label:'APPROACH',     cue:'Right Foot',    detail:'plant lead foot · eyes OB',        color:'gold', click:'hi',    speak:'Right foot',                 isWisdom:false },
+    //  3  LEFT FOOT
+    { ms:B,   phase:'PHASE 1',  label:'APPROACH',     cue:'Left Foot',     detail:'set stance width',                 color:'',     click:'mid',   speak:'Left foot',                  isWisdom:false },
+    //  4  BRIDGE DOWN
+    { ms:B,   phase:'PHASE 1',  label:'APPROACH',     cue:'Bridge Down',   detail:'lower into address · eyes CB',     color:'cyan', click:'mid',   speak:'Bridge down',                isWisdom:false },
+    //  5  ADDRESS PAUSE
+    { ms:B,   phase:'PHASE 1',  label:'PAUSE',        cue:'Pause',         detail:'full stillness · breathe out',     color:'red',  click:'soft',  speak:'Pause. Settle.',             isWisdom:false },
+    //  6  WU1 BACK
+    { ms:B,   phase:'PHASE 2',  label:'WARM-UP 1',    cue:'Back',  detail:'normal pace · drift to stop · OB', color:'red',  click:'mid',   speak:'Back',                       isWisdom:false },
+    //  7  WU1 FORWARD
+    { ms:B,   phase:'PHASE 2',  label:'WARM-UP 1',    cue:'Forward',       detail:'normal pace · eyes CB',            color:'cyan', click:'hi',    speak:'Forward',                    isWisdom:false },
+    //  8  WU2 BACK+LOCK OB
+    { ms:B,   phase:'PHASE 2',  label:'WARM-UP 2',    cue:'Back',   detail:'drift to stop · eyes lock OB',     color:'gold', click:'mid',   speak:'Back', isWisdom:false },
+    //  9  WU2 FORWARD
+    { ms:B,   phase:'PHASE 2',  label:'WARM-UP 2',    cue:'Forward',       detail:'normal pace · eyes CB',            color:'cyan', click:'hi',    speak:'Forward',                    isWisdom:false },
+    // 10  EYES LOCKED (settle before slow back)
+    { ms:B,   phase:'PHASE 2',  label:'FINAL STROKE', cue:'Eyes Locked',   detail:'lock eyes on OB contact point',    color:'gold', click:'soft',  speak:'Eyes locked.',                      isWisdom:false },
+    // 11  FINAL SLOW BACK (2 beats)
+    { ms:B2,  phase:'PHASE 2',  label:'SLOW BACK ½x', cue:'Slow... Back',  detail:'half speed · 2 beats · load it',   color:'gold', click:'slow',  speak:'Slow back.',                 isWisdom:false },
+    // 12  LOAD PAUSE — completes the 4-beat measure before shoot
+    { ms:B,   phase:'PHASE 2',  label:'LOAD',         cue:'Set',           detail:'apex · eyes locked OB · ready',    color:'red',  click:'soft',  speak:null,                         isWisdom:false },
+    // 13  SHOOT
+    { ms:B,   phase:'PHASE 3',  label:'EXECUTE',      cue:'THROW',         detail:'slip through · eyes on OB',        color:'gold', click:'shoot', speak:'Throw',                      isWisdom:false },
+    // 14  HOLD
+    { ms:B,   phase:'PHASE 3',  label:'HOLD',         cue:'Hold Position', detail:'stay down · do not lift',          color:'cyan', click:'soft',  speak:'Hold your position.',        isWisdom:false },
+    // 15  FREEZE 1
+    { ms:B,   phase:'PHASE 3',  label:'FREEZE',       cue:'Stay Down',     detail:'ball is still travelling',         color:'red',  click:'soft',  speak:null,                         isWisdom:false },
+    // 16  FREEZE 2
+    { ms:B,   phase:'PHASE 3',  label:'FREEZE',       cue:'Stay Down',     detail:'wait for the pocket',              color:'red',  click:'soft',  speak:null,                         isWisdom:false },
+  ];
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let audioCtx  = null;
+let running   = false;
+let runId     = 0;    // bumped each play/stop — orphans all pending callbacks
+let shotCount = 0;
+
+// ═══════════════════════════════════════════════════════════
+// WAKE LOCK — keep screen on during routine
+// ═══════════════════════════════════════════════════════════
+let wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try { wakeLock = await navigator.wakeLock.request('screen'); } catch {}
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+}
+// Re-acquire if the page becomes visible again (e.g. after tab switch)
+document.addEventListener('visibilitychange', () => {
+  if (running && document.visibilityState === 'visible') requestWakeLock();
+});
+
+// ═══════════════════════════════════════════════════════════
+// AUDIO
+// ═══════════════════════════════════════════════════════════
+function initAudio() {
+  if (!audioCtx || audioCtx.state === 'closed') {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playClick(type, when) {
+  if (!audioCtx) return;
+  const map = {
+    hi:    [[1200, 1.0,  0.06]],
+    mid:   [[800,  0.85, 0.055]],
+    soft:  [[500,  0.70, 0.05]],
+    slow:  [[560,  0.80, 0.08]],
+    shoot: [[120,  1.0,  0.12], [1400, 0.95, 0.07]],
   };
+  (map[type] || []).forEach(([freq, amp, dur]) => {
+    const osc = audioCtx.createOscillator();
+    const env = audioCtx.createGain();
+    osc.connect(env);
+    env.connect(audioCtx.destination);
+    osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, when);
+    env.gain.linearRampToValueAtTime(amp, when + 0.008);
+    env.gain.exponentialRampToValueAtTime(0.001, when + dur);
+    osc.start(when);
+    osc.stop(when + dur + 0.02);
+  });
+}
 
-  const PRIMARY_ORDER = ['l-drill', 'rail-cut', 'mother'];
-  const COMBINE_ORDER = ['stop-shot', 'long-straight', 'l-drill', 'rail-cut', 'mother'];
+// ═══════════════════════════════════════════════════════════
+// SPEECH
+// ═══════════════════════════════════════════════════════════
+function getBestVoice() {
+  const vs = window.speechSynthesis.getVoices();
+  if (!vs.length) return null;
+  return vs.find(v => v.name === 'Daniel')
+      || vs.find(v => v.name === 'Alex')
+      || vs.find(v => v.name === 'Samantha')
+      || vs.find(v => v.name.includes('Google US English'))
+      || vs.find(v => v.lang === 'en-US')
+      || vs.find(v => v.lang && v.lang.startsWith('en'))
+      || vs[0];
+}
 
-  const state = loadState();
-  let cadenceBeat = 0;
-  let cadenceTimer = null;
-  let audioContext = null;
-  let toastTimer = null;
+// ── SPEECH ────────────────────────────────────────────────
+// iOS Safari requires speechSynthesis.speak() to be called
+// synchronously in the user gesture call stack.
+// Strategy:
+//   1. On tap, speak a silent unlock utterance SYNCHRONOUSLY
+//   2. Each utterance's onend schedules the next via setTimeout
+//      — this is allowed because the engine is now unlocked
+// speechPlan is built at tap time: [{text, delayMs}]
+let speechPlan   = [];
+let speechActive = false;
 
-  const trainingDateInput = document.getElementById('trainingDate');
-  const todayBtn = document.getElementById('todayBtn');
-  const cadenceBtn = document.getElementById('cadenceBtn');
-  const cadenceStatus = document.getElementById('cadenceStatus');
-  const beatBar = document.getElementById('beatBar');
-  const primaryPanel = document.getElementById('primaryPanel');
-  const combineBody = document.getElementById('combineBody');
-  const summaryBody = document.getElementById('summaryBody');
-  const baselineStatus = document.getElementById('baselineStatus');
-  const auditBanner = document.getElementById('auditBanner');
-  const combineStatus = document.getElementById('combineStatus');
-  const logicBlock = document.getElementById('logicBlock');
+function makeSpeechUtterance(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate   = 0.84;
+  u.pitch  = 0.95;
+  u.volume = 1.0;
+  const v  = getBestVoice();
+  if (v) u.voice = v;
+  return u;
+}
 
-  initBeatBar();
-  initLogicBlock();
-  attachListeners();
-  setSelectedDate(getTodayKey());
+function speakNext(plan, idx, startMs, myRunId) {
+  if (idx >= plan.length) { speechActive = false; return; }
+  if (!running || runId !== myRunId) { speechActive = false; return; }
 
-  function attachListeners() {
-    trainingDateInput.addEventListener('change', () => setSelectedDate(trainingDateInput.value || getTodayKey()));
-    todayBtn.addEventListener('click', () => setSelectedDate(getTodayKey()));
-    cadenceBtn.addEventListener('click', toggleCadence);
+  const item    = plan[idx];
+  const waitMs  = Math.max(0, startMs + item.delayMs - performance.now());
 
-    document.body.addEventListener('click', event => {
-      const logKey = event.target.getAttribute('data-log');
-      if (logKey) {
-        const [drillId, outcome] = logKey.split(':');
-        logRep(drillId, outcome);
-        return;
-      }
+  setTimeout(() => {
+    if (!running || runId !== myRunId) { speechActive = false; return; }
+    const u = makeSpeechUtterance(item.text);
+    u.onend  = () => speakNext(plan, idx + 1, startMs, myRunId);
+    u.onerror = () => speakNext(plan, idx + 1, startMs, myRunId);
+    window.speechSynthesis.speak(u);
+  }, waitMs);
+}
 
-      const side = event.target.getAttribute('data-side');
-      if (side) {
-        const record = getSelectedRecord();
-        record.primary.side = side;
-        persistAndRender();
-        return;
-      }
+function unlockAndSpeak(plan, myRunId) {
+  // Speak a zero-length silent utterance SYNCHRONOUSLY to unlock iOS
+  const silent = new SpeechSynthesisUtterance(' ');
+  silent.volume = 0;
+  silent.rate   = 2;
+  const v = getBestVoice();
+  if (v) silent.voice = v;
+  const startMs = performance.now();
+  silent.onend  = () => speakNext(plan, 0, startMs, myRunId);
+  silent.onerror = () => speakNext(plan, 0, startMs, myRunId);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(silent);
+  speechActive = true;
+}
 
-      const combineAction = event.target.getAttribute('data-combine');
-      if (combineAction) {
-        const [drillId, outcome] = combineAction.split(':');
-        setCombineResult(drillId, outcome === 'hit');
-      }
-    });
+// ═══════════════════════════════════════════════════════════
+// UI
+// ═══════════════════════════════════════════════════════════
+function renderStep(s, idx, total) {
+  document.getElementById('phaseLabel').textContent  = s.phase + ' · ' + s.label;
+  document.getElementById('phaseCue').textContent    = s.cue;
+  document.getElementById('phaseCue').className      = 'phase-cue ' + (s.color || '');
+  document.getElementById('phaseDetail').textContent = s.detail;
+
+  const wsub = document.getElementById('wisdomSub');
+  if (s.isWisdom) {
+    wsub.textContent = s.sub || s.detail;
+    wsub.classList.add('on');
+    document.getElementById('phaseDisplay').style.minHeight = '145px';
+  } else {
+    wsub.classList.remove('on');
+    document.getElementById('phaseDisplay').style.minHeight = '120px';
   }
 
-  function initBeatBar() {
-    beatBar.innerHTML = '';
-    for (let index = 0; index < CADENCE_BEATS; index += 1) {
-      const dot = document.createElement('div');
-      dot.className = 'beat-dot';
-      dot.id = 'beat-' + index;
-      beatBar.appendChild(dot);
+  // Beat indicator — position within a 4-beat measure
+  const beatPos = idx % 4;
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('d' + i).className =
+      'beat-dot' + (i === beatPos ? ' on-' + (s.color || '') : '');
+  }
+
+  document.getElementById('progressFill').style.width =
+    Math.round((idx + 1) / total * 100) + '%';
+}
+
+function renderReady() {
+  document.getElementById('phaseLabel').textContent  = 'READY';
+  document.getElementById('phaseCue').textContent    = 'Hit play before your shot';
+  document.getElementById('phaseCue').className      = 'phase-cue';
+  document.getElementById('phaseDetail').textContent = '';
+  document.getElementById('wisdomSub').classList.remove('on');
+  document.getElementById('phaseDisplay').style.minHeight = '120px';
+  document.getElementById('progressFill').style.width = '0%';
+  for (let i = 0; i < 4; i++) document.getElementById('d' + i).className = 'beat-dot';
+}
+
+function renderComplete() {
+  document.getElementById('phaseLabel').textContent  = 'COMPLETE';
+  document.getElementById('phaseCue').textContent    = 'Step up. Execute.';
+  document.getElementById('phaseCue').className      = 'phase-cue gold';
+  document.getElementById('phaseDetail').textContent = '';
+  document.getElementById('progressFill').style.width = '100%';
+  const fl = document.getElementById('doneFlash');
+  fl.classList.add('show');
+  setTimeout(() => fl.classList.remove('show'), 350);
+}
+
+function setButtons(playing) {
+  const btn = document.getElementById('playBtn');
+  btn.classList.toggle('playing', playing);
+  btn.setAttribute('aria-label', playing ? 'Stop' : 'Play');
+  document.getElementById('btnLabel').textContent   = playing ? 'STOP' : 'PLAY';
+  document.getElementById('idleHint').style.display = playing ? 'none' : 'block';
+}
+
+// ═══════════════════════════════════════════════════════════
+// ENGINE
+// Chain of setTimeout calls — each step schedules the next.
+// runId guards against orphaned callbacks after stop().
+// ═══════════════════════════════════════════════════════════
+function runStep(seq, idx, myRunId) {
+  if (!running || runId !== myRunId) return;  // orphan guard
+
+  const s     = seq[idx];
+  const total = seq.length;
+  const now   = performance.now();
+
+  // 1. Render UI
+  renderStep(s, idx, total);
+
+  // 2. Audio click — schedule slightly ahead in audio time
+  if (s.click && audioCtx) {
+    playClick(s.click, audioCtx.currentTime + 0.015);
+  }
+
+  // 3. Schedule next step after this step's duration
+  const nextIdx = idx + 1;
+  if (nextIdx < total) {
+    setTimeout(() => runStep(seq, nextIdx, myRunId), s.ms);
+  } else {
+    // Last step — wait its full duration then finish
+    setTimeout(() => {
+      if (!running || runId !== myRunId) return;
+      finish();
+    }, s.ms);
+  }
+}
+
+function start() {
+  initAudio();
+  requestWakeLock();
+  window.speechSynthesis.cancel();
+  speechActive = false;
+  speechPlan   = [];
+  running = true;
+  runId++;
+  const myRunId = runId;
+  const seq     = buildSequence();
+
+  setButtons(true);
+
+  // Build speech plan — delays relative to NOW (tap moment)
+  // All speech is unlocked synchronously below before countdown starts
+  const COUNTDOWN_MS = 3000;
+  const plan = [];
+  let t = COUNTDOWN_MS + 100; // ms from now
+  for (let i = 0; i < seq.length; i++) {
+    const s = seq[i];
+    if (s.speak) {
+      const offset = (s.label === 'HOLD') ? 450 : 0;
+      plan.push({ text: s.speak, delayMs: t + offset });
     }
+    t += s.ms;
   }
+  // SYNCHRONOUS unlock — must happen inside the tap handler call stack
+  unlockAndSpeak(plan, myRunId);
 
-  function initLogicBlock() {
-    logicBlock.textContent = [
-      'function weeklyRotation(date) {',
-      '  switch (date.getDay()) {',
-      "    case 1:",
-      "    case 2:",
-      "      return { block: 'L-Drill', metric: '5 consecutive racks' };",
-      "    case 3:",
-      "    case 4:",
-      "      return { block: 'Rail Cut Drill', metric: '10L / 10R consecutive' };",
-      "    case 5:",
-      "    case 6:",
-      "      return { block: 'Mother Drill', metric: '3 consecutive clears' };",
-      '    default:',
-      "      return { block: 'Sunday Combine', metric: 'Test all 5 drills' };",
-      '  }',
-      '}',
-      '',
-      'primaryUnlocked = stopShot.attempts >= 15 &&',
-      '                  longStraight.attempts >= 10 &&',
-      '                  longStraight.makes >= 8;',
-      '',
-      'if (repOutcome === success) failureRun = 0;',
-      'else failureRun += 1;',
-      '',
-      'if (failureRun === 3) audioPrompt(',
-      "  'Audit: Check Vision Center and Elbow Stillness.'",
-      ');',
-      '',
-      'if (sundayMetricHitThreeWeeksStraight) markDrillAsStabilized();'
-    ].join('\n');
-  }
+  // 3-second countdown display + audio ticks
+  let countdown = 3;
+  const cdEl    = document.getElementById('phaseCue');
+  const cdLabel = document.getElementById('phaseLabel');
+  cdLabel.textContent = 'GET READY';
+  cdEl.textContent    = countdown;
+  cdEl.className      = 'phase-cue gold';
+  if (audioCtx) playClick('soft', audioCtx.currentTime + 0.05);
 
-  function loadState() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"records":{},"selectedDate":""}');
-    } catch {
-      return { records: {}, selectedDate: '' };
-    }
-  }
-
-  function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
-
-  function getTodayKey() {
-    return new Date().toISOString().slice(0, 10);
-  }
-
-  function parseDate(dateKey) {
-    return new Date(dateKey + 'T12:00:00');
-  }
-
-  function formatDateLabel(dateKey) {
-    return parseDate(dateKey).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-  }
-
-  function formatShortDay(dateKey) {
-    return parseDate(dateKey).toLocaleDateString(undefined, { weekday: 'short' });
-  }
-
-  function getWeekDates(dateKey) {
-    const base = parseDate(dateKey);
-    const mondayOffset = (base.getDay() + 6) % 7;
-    const monday = new Date(base);
-    monday.setDate(base.getDate() - mondayOffset);
-    monday.setHours(12, 0, 0, 0);
-    return Array.from({ length: 7 }, (_, index) => {
-      const current = new Date(monday);
-      current.setDate(monday.getDate() + index);
-      return current.toISOString().slice(0, 10);
-    });
-  }
-
-  function getScheduleForDate(dateKey) {
-    const day = parseDate(dateKey).getDay();
-    if (day === 1 || day === 2) return DRILLS['l-drill'];
-    if (day === 3 || day === 4) return DRILLS['rail-cut'];
-    if (day === 5 || day === 6) return DRILLS['mother'];
-    return { id: 'combine', name: 'Sunday Combine', metric: 'Test all 5 drills' };
-  }
-
-  function defaultPrimaryState(drillId) {
-    if (drillId === 'rail-cut') {
-      return { drillId, side: 'left', left: 0, right: 0, bestLeft: 0, bestRight: 0, potFails: 0, mechanicalFails: 0, successes: 0 };
-    }
-    return { drillId, streak: 0, best: 0, potFails: 0, mechanicalFails: 0, successes: 0 };
-  }
-
-  function defaultCombineState() {
-    return { results: { 'stop-shot': null, 'long-straight': null, 'l-drill': null, 'rail-cut': null, 'mother': null } };
-  }
-
-  function defaultRecord(dateKey) {
-    const schedule = getScheduleForDate(dateKey);
-    return {
-      date: dateKey,
-      blockId: schedule.id,
-      baseline: {
-        stopShot: { attempts: 0, precise: 0, mechanicalFlags: 0 },
-        longStraight: { attempts: 0, makes: 0, mechanicalFlags: 0 }
-      },
-      primary: defaultPrimaryState(schedule.id === 'combine' ? 'l-drill' : schedule.id),
-      combine: defaultCombineState(),
-      failureRun: 0,
-      auditCount: 0,
-      log: []
-    };
-  }
-
-  function getRecord(dateKey) {
-    if (!state.records[dateKey]) state.records[dateKey] = defaultRecord(dateKey);
-    const record = state.records[dateKey];
-    const schedule = getScheduleForDate(dateKey);
-    record.blockId = schedule.id;
-    if (schedule.id !== 'combine' && record.primary.drillId !== schedule.id) record.primary = defaultPrimaryState(schedule.id);
-    if (!record.combine) record.combine = defaultCombineState();
-    if (!record.log) record.log = [];
-    if (typeof record.failureRun !== 'number') record.failureRun = 0;
-    if (typeof record.auditCount !== 'number') record.auditCount = 0;
-    return record;
-  }
-
-  function setSelectedDate(dateKey) {
-    state.selectedDate = dateKey;
-    trainingDateInput.value = dateKey;
-    persistAndRender();
-  }
-
-  function getSelectedRecord() {
-    return getRecord(state.selectedDate || getTodayKey());
-  }
-
-  function persistAndRender() {
-    saveState();
-    render();
-  }
-
-  function render() {
-    const record = getSelectedRecord();
-    const schedule = getScheduleForDate(record.date);
-    const unlocked = isPrimaryUnlocked(record);
-    renderHero(schedule, unlocked, computeWeekFocus(record.date), computeRestorationProxy(record.date));
-    renderBaseline(record, unlocked);
-    renderPrimary(record, schedule, unlocked);
-    renderCombine(record);
-    renderSummaryTable(record.date);
-  }
-
-  function renderHero(schedule, unlocked, weeklyFocus, restoration) {
-    document.getElementById('summaryBlock').textContent = schedule.name;
-    document.getElementById('summaryMetric').textContent = schedule.metric;
-    const unlockNode = document.getElementById('summaryUnlock');
-    unlockNode.textContent = schedule.id === 'combine' ? 'Combine Day' : unlocked ? 'Unlocked' : 'Locked';
-    unlockNode.className = 'summary-value ' + (schedule.id === 'combine' ? 'gold' : unlocked ? 'green' : 'orange');
-    document.getElementById('summaryUnlockCopy').textContent = schedule.id === 'combine'
-      ? 'Score all five drills and update Sunday streaks.'
-      : unlocked
-        ? 'Baselines complete. Primary block is live.'
-        : 'Complete 15 Stop Shot attempts and make 8 of 10 Long Straight-In.';
-    document.getElementById('summaryRestoration').textContent = restoration + '%';
-    document.getElementById('summaryFocus').textContent = weeklyFocus + '%';
-  }
-
-  function renderBaseline(record, unlocked) {
-    const stop = record.baseline.stopShot;
-    const longStraight = record.baseline.longStraight;
-    document.getElementById('stopAttempts').textContent = stop.attempts;
-    document.getElementById('stopPrecise').textContent = stop.precise;
-    document.getElementById('stopRotations').textContent = Math.floor(stop.attempts / 5) + '/3';
-    document.getElementById('stopMeter').style.width = Math.min(100, stop.attempts / 15 * 100) + '%';
-    document.getElementById('longAttempts').textContent = longStraight.attempts;
-    document.getElementById('longMakes').textContent = longStraight.makes;
-    document.getElementById('longPace').textContent = longStraight.attempts === 0 ? '0%' : Math.round(longStraight.makes / Math.max(longStraight.attempts, 10) * 100) + '%';
-    document.getElementById('longMeter').style.width = Math.min(100, longStraight.attempts / 10 * 100) + '%';
-    baselineStatus.textContent = unlocked ? 'Primary Unlocked' : 'Baselines In Progress';
-    baselineStatus.className = 'status-pill ' + (unlocked ? 'ready' : 'locked');
-    auditBanner.classList.toggle('show', record.failureRun >= 3);
-  }
-
-  function renderPrimary(record, schedule, unlocked) {
-    if (schedule.id === 'combine') {
-      primaryPanel.innerHTML = `
-        <div class="section-kicker">Primary Block</div>
-        <h2 class="section-title">Sunday Combine Active</h2>
-        <p class="section-copy">Sunday is a test day. Review the scorecard below and mark whether each drill reached its Pro Metric. Stabilization is computed from those Sunday hits.</p>
-      `;
-      return;
-    }
-
-    const drill = DRILLS[schedule.id];
-    const stabilized = isStabilized(drill.id);
-    const sundayStreak = getSundayMetricStreak(drill.id);
-    const highlights = drill.id === 'rail-cut'
-      ? [
-          highlightCard('Current Side', record.primary.side === 'left' ? 'LEFT' : 'RIGHT', 'gold', 'Active lane for the next make.'),
-          highlightCard('Left Streak', record.primary.left + '/' + drill.target, 'green', 'Misses reset only the active side.'),
-          highlightCard('Right Streak', record.primary.right + '/' + drill.target, 'green', 'Need 10 consecutive on both sides.'),
-          highlightCard('Sunday Streak', sundayStreak + '/3', stabilized ? 'gold' : 'orange', stabilized ? 'Stabilized across three Sundays.' : 'Pro Metric must be hit on Sunday.')
-        ].join('')
-      : [
-          highlightCard('Current Streak', record.primary.streak + '/' + drill.target, 'green', 'Only clean reps advance the chain.'),
-          highlightCard('Best Today', String(record.primary.best), 'gold', 'Best verified output for the selected date.'),
-          highlightCard('Failures', String(record.primary.potFails + record.primary.mechanicalFails), 'orange', 'Potting and mechanical failures both reset the streak.'),
-          highlightCard('Sunday Streak', sundayStreak + '/3', stabilized ? 'gold' : 'orange', stabilized ? 'Stabilized across three Sundays.' : 'Pro Metric must be hit on Sunday.')
-        ].join('');
-
-    primaryPanel.innerHTML = `
-      <div class="section-kicker">Primary Block</div>
-      <div class="primary-top">
-        <div>
-          <h2 class="primary-title">${drill.name}</h2>
-          <p class="primary-copy">${primaryDescription(drill.id)}</p>
-        </div>
-        <div class="primary-meta">
-          <span class="metric-pill">${drill.metric}</span>
-          ${stabilized ? '<span class="badge">Stabilized</span>' : ''}
-          <span class="status-pill ${unlocked ? 'ready' : 'locked'}">${unlocked ? 'Ready to Train' : 'Locked by Baselines'}</span>
-        </div>
-      </div>
-      <div class="highlight-grid">${highlights}</div>
-      ${drill.id === 'rail-cut' ? `
-        <div class="side-switch">
-          <button class="side-btn ${record.primary.side === 'left' ? 'active' : ''}" data-side="left">Left Side</button>
-          <button class="side-btn ${record.primary.side === 'right' ? 'active' : ''}" data-side="right">Right Side</button>
-        </div>
-      ` : ''}
-      <div class="toolbox">
-        <div class="toolbox-block">
-          <label>Form rule</label>
-          <div class="helper-copy">A mechanical self-flag resets the streak even if the shot dropped.</div>
-        </div>
-        <div class="toolbox-block">
-          <label>Failure streak</label>
-          <div class="helper-copy">Three failures in a row trigger the mechanical audit prompt and speech cue.</div>
-        </div>
-      </div>
-      <div class="log-grid">
-        <button class="log-btn clean" data-log="${drill.id}:success" ${unlocked ? '' : 'disabled'}>Clean Rep</button>
-        <button class="log-btn pot" data-log="${drill.id}:pot" ${unlocked ? '' : 'disabled'}>Potting Failure</button>
-        <button class="log-btn mechanical" data-log="${drill.id}:mechanical" ${unlocked ? '' : 'disabled'}>Mechanical Self-Flag</button>
-      </div>
-    `;
-  }
-
-  function highlightCard(label, value, tone, copy) {
-    return `
-      <div class="highlight">
-        <div class="tiny-label">${label}</div>
-        <div class="highlight-value ${tone}">${value}</div>
-        <div class="highlight-copy">${copy}</div>
-      </div>
-    `;
-  }
-
-  function primaryDescription(drillId) {
-    if (drillId === 'l-drill') return 'Mon and Tue are pattern-speed days. Log a clean rep only when the full rack was executed without result or form leakage.';
-    if (drillId === 'rail-cut') return 'Wed and Thu are vision-alignment days. Any miss resets the active side. Keep left and right counts independent.';
-    return 'Fri and Sat are mastery-touch days. Only a full clean clear advances the Mother Drill streak.';
-  }
-
-  function renderCombine(record) {
-    const sunday = parseDate(record.date).getDay() === 0;
-    combineStatus.textContent = sunday ? 'Sunday Entry Mode' : 'Review Mode';
-    combineStatus.className = 'status-pill ' + (sunday ? 'ready' : 'combine');
-
-    combineBody.innerHTML = COMBINE_ORDER.map(drillId => {
-      const drill = DRILLS[drillId];
-      const result = record.combine.results[drillId];
-      const streak = getSundayMetricStreak(drillId);
-      const stabilized = isStabilized(drillId);
-      const statusText = result === null ? '<span class="tiny-label">Not scored</span>' : result ? '<span class="hit-text">Metric hit</span>' : '<span class="miss-text">Below metric</span>';
-      const actionCell = sunday
-        ? `
-          <div class="combine-actions">
-            <button class="combine-btn hit" data-combine="${drillId}:hit">Hit</button>
-            <button class="combine-btn miss" data-combine="${drillId}:miss">Below</button>
-          </div>
-        `
-        : `<span class="badge">${stabilized ? 'Stabilized' : 'Sunday only'}</span>`;
-
-      return `
-        <tr>
-          <td>${drill.name}</td>
-          <td>${drill.metric}</td>
-          <td>${statusText}</td>
-          <td>${streak}/3${stabilized ? ' · Stabilized' : ''}</td>
-          <td>${actionCell}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function renderSummaryTable(selectedDate) {
-    const weekDates = getWeekDates(selectedDate);
-    summaryBody.innerHTML = weekDates.map(dateKey => {
-      const record = getRecord(dateKey);
-      const schedule = getScheduleForDate(dateKey);
-      const baselines = `${record.baseline.stopShot.attempts}/15 stop · ${record.baseline.longStraight.makes}/${record.baseline.longStraight.attempts} long`;
-      const unlock = schedule.id === 'combine' ? 'Combine' : isPrimaryUnlocked(record) ? 'Unlocked' : 'Locked';
-      const primary = schedule.id === 'combine' ? 'Combine review' : schedule.id === 'rail-cut' ? `${record.primary.left}/10 L · ${record.primary.right}/10 R` : `${record.primary.best} best · ${record.primary.streak} live`;
-      const combine = parseDate(record.date).getDay() === 0
-        ? `${COMBINE_ORDER.map(drillId => record.combine.results[drillId]).filter(value => value === true).length}/${COMBINE_ORDER.length} hit`
-        : '—';
-      return `
-        <tr>
-          <td>${formatShortDay(dateKey)} · ${formatDateLabel(dateKey)}</td>
-          <td>${schedule.name}</td>
-          <td>${baselines}</td>
-          <td>${unlock}</td>
-          <td>${primary}</td>
-          <td>${computeFocusScore(record)}%</td>
-          <td>${record.auditCount}</td>
-          <td>${combine}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function isPrimaryUnlocked(record) {
-    return record.baseline.stopShot.attempts >= 15 && record.baseline.longStraight.attempts >= 10 && record.baseline.longStraight.makes >= 8;
-  }
-
-  function logRep(drillId, outcome) {
-    const record = getSelectedRecord();
-    const schedule = getScheduleForDate(record.date);
-    if (schedule.id !== 'combine' && PRIMARY_ORDER.includes(drillId) && !isPrimaryUnlocked(record)) {
-      showToast('Primary Locked', 'Finish both mandatory baselines before logging the primary block.');
-      return;
-    }
-
-    record.log.push({
-      drillId,
-      outcome,
-      reason: outcome === 'mechanical' ? document.getElementById('mechanicalReason').value : outcome === 'pot' ? document.getElementById('pottingReason').value : null,
-      at: Date.now()
-    });
-
-    if (drillId === 'stop-shot') {
-      record.baseline.stopShot.attempts += 1;
-      if (outcome === 'success') record.baseline.stopShot.precise += 1;
-      if (outcome === 'mechanical') record.baseline.stopShot.mechanicalFlags += 1;
-    } else if (drillId === 'long-straight') {
-      record.baseline.longStraight.attempts += 1;
-      if (outcome === 'success') record.baseline.longStraight.makes += 1;
-      if (outcome === 'mechanical') record.baseline.longStraight.mechanicalFlags += 1;
+  const cdInterval = setInterval(() => {
+    if (!running || runId !== myRunId) { clearInterval(cdInterval); return; }
+    countdown--;
+    if (countdown > 0) {
+      cdEl.textContent = countdown;
+      if (audioCtx) playClick('soft', audioCtx.currentTime + 0.05);
     } else {
-      applyPrimary(record.primary, drillId, outcome);
+      clearInterval(cdInterval);
+      cdEl.textContent = '';
+      runStep(seq, 0, myRunId);
     }
+  }, 1000);
+}
 
-    if (outcome === 'success') {
-      record.failureRun = 0;
-    } else {
-      record.failureRun += 1;
-      if (record.failureRun === 3) {
-        record.auditCount += 1;
-        showAudit();
-      }
-    }
+function finish() {
+  running = false;
+  releaseWakeLock();
+  shotCount++;
+  document.getElementById('shotCountNum').textContent = shotCount;
+  setButtons(false);
+  renderComplete();
+}
 
-    persistAndRender();
+function stop() {
+  running = false;
+  runId++;
+  releaseWakeLock();
+  speechActive = false;
+  speechPlan   = [];
+  window.speechSynthesis.cancel();
+  setButtons(false);
+  renderReady();
+}
+
+function togglePlay() {
+  if (running) stop(); else start();
+}
+
+// ═══════════════════════════════════════════════════════════
+// VOICE PRELOAD
+// ═══════════════════════════════════════════════════════════
+window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+document.getElementById('playBtn').addEventListener('click', () => {
+  if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+});
+
+// ═══════════════════════════════════════════════════════════
+// KEYBOARD SHORTCUT — space / enter to play·stop
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat) {
+    e.preventDefault();
+    togglePlay();
   }
+});
 
-  function applyPrimary(primary, drillId, outcome) {
-    if (primary.drillId !== drillId) {
-      Object.assign(primary, defaultPrimaryState(drillId));
-    }
-
-    if (drillId === 'rail-cut') {
-      const sideKey = primary.side === 'left' ? 'left' : 'right';
-      const bestKey = primary.side === 'left' ? 'bestLeft' : 'bestRight';
-      if (outcome === 'success') {
-        primary[sideKey] += 1;
-        primary[bestKey] = Math.max(primary[bestKey], primary[sideKey]);
-        primary.successes += 1;
-        if (primary.side === 'left' && primary.left >= DRILLS['rail-cut'].target) primary.side = 'right';
-      } else {
-        if (outcome === 'pot') primary.potFails += 1;
-        if (outcome === 'mechanical') primary.mechanicalFails += 1;
-        primary[sideKey] = 0;
-      }
-      return;
-    }
-
-    if (outcome === 'success') {
-      primary.streak += 1;
-      primary.best = Math.max(primary.best, primary.streak);
-      primary.successes += 1;
-    } else {
-      if (outcome === 'pot') primary.potFails += 1;
-      if (outcome === 'mechanical') primary.mechanicalFails += 1;
-      primary.streak = 0;
-    }
-  }
-
-  function showAudit() {
-    const message = 'Audit: Check Vision Center and Elbow Stillness.';
-    showToast('Mechanical Audit', message);
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(message);
-      utterance.rate = 0.92;
-      utterance.pitch = 0.92;
-      window.speechSynthesis.speak(utterance);
-    }
-  }
-
-  function showToast(title, body) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastTitle').textContent = title;
-    document.getElementById('toastBody').textContent = body;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
-  }
-
-  function setCombineResult(drillId, hit) {
-    const record = getSelectedRecord();
-    if (parseDate(record.date).getDay() !== 0) {
-      showToast('Sunday Only', 'Sunday Combine scoring is only editable on Sunday dates.');
-      return;
-    }
-    record.combine.results[drillId] = hit;
-    persistAndRender();
-  }
-
-  function computeFocusScore(record) {
-    if (!record.log.length) return 0;
-    const mechanical = record.log.filter(entry => entry.outcome === 'mechanical').length;
-    return Math.round((record.log.length - mechanical) / record.log.length * 100);
-  }
-
-  function computeWeekFocus(dateKey) {
-    const entries = getWeekDates(dateKey).flatMap(dayKey => getRecord(dayKey).log);
-    if (!entries.length) return 0;
-    const mechanical = entries.filter(entry => entry.outcome === 'mechanical').length;
-    return Math.round((entries.length - mechanical) / entries.length * 100);
-  }
-
-  function computeRestorationProxy(dateKey) {
-    const weekRecords = getWeekDates(dateKey).map(getRecord);
-    const trainingDays = weekRecords.filter(record => getScheduleForDate(record.date).id !== 'combine');
-    const baselineComplete = trainingDays.length ? trainingDays.filter(record => record.baseline.stopShot.attempts >= 15 && record.baseline.longStraight.attempts >= 10).length / trainingDays.length * 100 : 0;
-    const primaryDays = trainingDays.length ? trainingDays.filter(record => record.primary.successes + record.primary.potFails + record.primary.mechanicalFails > 0).length / trainingDays.length * 100 : 0;
-    return Math.round(baselineComplete * 0.45 + primaryDays * 0.35 + computeWeekFocus(dateKey) * 0.20);
-  }
-
-  function getSundayRecords() {
-    return Object.keys(state.records)
-      .filter(dateKey => parseDate(dateKey).getDay() === 0)
-      .sort((left, right) => right.localeCompare(left))
-      .map(getRecord);
-  }
-
-  function getSundayMetricStreak(drillId) {
-    let streak = 0;
-    let previousDate = null;
-    for (const record of getSundayRecords()) {
-      if (record.combine.results[drillId] !== true) break;
-      if (previousDate) {
-        const gap = Math.round((parseDate(previousDate) - parseDate(record.date)) / 86400000);
-        if (gap !== 7) break;
-      }
-      streak += 1;
-      previousDate = record.date;
-    }
-    return Math.min(streak, 3);
-  }
-
-  function isStabilized(drillId) {
-    return getSundayMetricStreak(drillId) >= 3;
-  }
-
-  function toggleCadence() {
-    if (cadenceTimer) {
-      stopCadence('Stopped.');
-      return;
-    }
-    cadenceBeat = 0;
-    cadenceBtn.textContent = 'Stop Cadence';
-    cadenceStatus.textContent = 'Cadence running: beat 1 of 10.';
-    pulseBeat();
-    cadenceTimer = setInterval(() => {
-      pulseBeat();
-      if (cadenceBeat >= CADENCE_BEATS) stopCadence('Cycle complete. Evaluate the rep, then reset.');
-    }, BEAT_MS);
-  }
-
-  function stopCadence(message) {
-    clearInterval(cadenceTimer);
-    cadenceTimer = null;
-    cadenceBeat = 0;
-    cadenceBtn.textContent = 'Play 10 Beats';
-    cadenceStatus.textContent = message;
-    document.querySelectorAll('.beat-dot').forEach(dot => dot.classList.remove('active'));
-  }
-
-  function pulseBeat() {
-    document.querySelectorAll('.beat-dot').forEach(dot => dot.classList.remove('active'));
-    const dot = document.getElementById('beat-' + cadenceBeat);
-    if (dot) dot.classList.add('active');
-    playClick(cadenceBeat);
-    cadenceBeat += 1;
-    cadenceStatus.textContent = cadenceBeat > CADENCE_BEATS ? 'Cycle complete. Evaluate the rep, then reset.' : 'Cadence running: beat ' + cadenceBeat + ' of 10.';
-  }
-
-  function playClick(beatIndex) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioContext) audioContext = new AudioContextClass();
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.value = beatIndex === 8 ? 880 : beatIndex === 9 ? 520 : 660;
-    gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.12, audioContext.currentTime + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.12);
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.13);
-  }
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    });
-  }
+// ═══════════════════════════════════════════════════════════
+// SERVICE WORKER
+// ═══════════════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
 </script>
+
 </body>
 </html>
