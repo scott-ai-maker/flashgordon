@@ -1,12 +1,12 @@
 {
-  "name": "Flash Gordon — Pre-Shot",
-  "short_name": "Flash Gordon",
-  "description": "Pre-shot routine trainer for Flash Gordon. 76 BPM, 4/4 time.",
+  "name": "Billiards Strength & Conditioning",
+  "short_name": "Billiards S&C",
+  "description": "Periodized billiards training tracker with daily baselines, rotating primary blocks, Sunday combine scoring, and focus analytics.",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#05080D",
-  "theme_color": "#05080D",
+  "background_color": "#08110d",
+  "theme_color": "#08110d",
   "icons": [
     {
       "src": "icon-192.png",

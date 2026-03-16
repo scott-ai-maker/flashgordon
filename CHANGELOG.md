@@ -1,5 +1,47 @@
 # Flash Gordon — Changelog
 
+## v3.0.0 — 2026-03-16
+
+### Billiards Strength & Conditioning App
+
+Complete rebuild of the single-page app around orthodox fundamentals training
+periodization and restoration tracking.
+
+**Core system changes:**
+- Replaced the pre-shot routine interface with a dedicated training dashboard
+  for daily baselines, rotating primary blocks, Sunday Combine scoring, and
+  weekly review
+- Added **Mandatory Baselines** tracking:
+  - Stop Shot Ladder: 3 rotations / 15 shots
+  - Long Straight-In: 10 attempts with 8/10 required to unlock the primary block
+- Added **Weekly Rotation** logic:
+  - Mon/Tue: L-Drill
+  - Wed/Thu: Rail Cut Drill
+  - Fri/Sat: Mother Drill
+  - Sun: Sunday Combine
+
+**Failure logic and auditing:**
+- Split rep logging into **Clean Rep**, **Potting Failure**, and
+  **Mechanical Self-Flag** paths
+- Mechanical self-flags count as failures even on made shots, preserving the
+  form-over-result philosophy
+- Added a rolling failure counter that triggers the spoken and visual prompt:
+  `Audit: Check Vision Center and Elbow Stillness.` after 3 failures in a row
+
+**Progress tracking:**
+- Added weekly **Focus Score** based on percentage of reps completed without a
+  mechanical self-flag
+- Added a **Restoration Proxy** based on baseline completion, primary block
+  adherence, and focus score
+- Added **Sunday Combine** scorecard with 3-Sunday stabilization logic per drill
+- Added a weekly **Data Summary Table** for block assignment, baseline progress,
+  unlock status, primary result, focus score, audit count, and combine result
+
+**PWA updates:**
+- Updated manifest branding and description for the new app
+- Bumped service worker cache version and refreshed cached font assets
+- Registered the service worker from the new app shell
+
 ## v2.5.0 — 2026-03-16
 
 ### Master Drills — Streak Mastery System
