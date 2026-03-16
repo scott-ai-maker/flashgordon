@@ -122,6 +122,41 @@ animation: pulse 1.0s ease-in-out infinite;
 .stat-val.gold { color:var(--gold); }
 .stat-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:3px; color:var(--text-dim); margin-top:3px; }
 
+/* ── Analysis trigger ─────────────────────────────────── */
+.analysis-btn { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:var(--text-dim); background:transparent; border:none; cursor:pointer; margin-top:7px; padding:3px 0; opacity:0.55; transition:all 0.2s; outline:none; }
+.analysis-btn:hover { opacity:1; color:var(--cyan); }
+
+/* ── Analytics overlay ─────────────────────────────────── */
+.analytics-overlay { display:none; position:fixed; inset:0; background:rgba(4,8,14,0.96); z-index:100; flex-direction:column; align-items:center; overflow-y:auto; padding:24px 20px 40px; }
+.analytics-panel { width:100%; max-width:420px; }
+.analytics-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.analytics-title { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:5px; color:var(--cyan); }
+.analytics-close { font-family:'Share Tech Mono',monospace; font-size:14px; color:var(--text-dim); background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:3px; width:28px; height:28px; cursor:pointer; outline:none; transition:all 0.15s; }
+.analytics-close:hover { color:var(--text); border-color:rgba(255,255,255,0.3); }
+.analytics-tabs { display:flex; gap:6px; margin-bottom:20px; }
+.atab { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--text-dim); background:transparent; border:1px solid rgba(0,191,255,0.15); border-radius:3px; padding:5px 12px; cursor:pointer; outline:none; transition:all 0.15s; }
+.atab.active { color:var(--cyan); border-color:rgba(0,191,255,0.5); background:rgba(0,191,255,0.06); }
+.fault-callout { background:rgba(255,68,68,0.06); border:1px solid rgba(255,68,68,0.2); border-radius:6px; padding:16px 20px; margin-bottom:16px; }
+.fault-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:var(--text-dim); margin-bottom:6px; }
+.fault-name { font-family:'Orbitron',sans-serif; font-size:26px; font-weight:700; color:var(--red); letter-spacing:3px; }
+.fault-sub { font-family:'Exo 2',sans-serif; font-size:11px; color:var(--text-dim); margin-top:5px; }
+.trend { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px; margin-left:6px; }
+.trend.worse  { color:var(--red); }
+.trend.better { color:#00d4aa; }
+.trend.neutral { color:var(--text-dim); }
+.rate-row { display:flex; align-items:baseline; gap:6px; margin-bottom:16px; padding:10px 14px; border:1px solid rgba(0,191,255,0.1); border-radius:4px; }
+.rate-big { font-family:'Orbitron',sans-serif; font-size:22px; color:var(--cyan); letter-spacing:1px; }
+.rate-lbl { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); }
+.error-bars { margin-bottom:12px; display:flex; flex-direction:column; gap:8px; }
+.error-bar-row { display:grid; grid-template-columns:62px 1fr 34px 26px; align-items:center; gap:8px; }
+.error-bar-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px; color:var(--text-dim); text-align:right; }
+.error-bar-track { height:6px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; }
+.error-bar-fill { height:100%; background:linear-gradient(90deg,rgba(255,68,68,0.6),var(--red)); border-radius:3px; transition:width 0.4s ease; }
+.error-bar-pct { font-family:'Orbitron',sans-serif; font-size:9px; color:var(--text); text-align:right; }
+.error-bar-cnt { font-family:'Share Tech Mono',monospace; font-size:8px; color:var(--text-dim); }
+.error-totals { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); text-align:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); }
+.no-data { font-family:'Exo 2',sans-serif; font-size:13px; color:var(--text-dim); text-align:center; padding:40px 20px; line-height:1.8; }
+
 /* ── Error log panel ───────────────────────────────────── */
 .error-panel { display:none; width:100%; max-width:420px; margin-top:12px; }
 .error-panel-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:8px; text-align:center; }
@@ -200,6 +235,9 @@ animation: pulse 1.0s ease-in-out infinite;
     </div>
   </div>
 
+  <!-- Analysis trigger -->
+  <button class="analysis-btn" onclick="showAnalytics('week')">▸ ERROR ANALYSIS</button>
+
   <!-- Error log -->
   <div class="error-panel" id="errorPanel">
     <div class="error-panel-label">— log error —</div>
@@ -216,6 +254,22 @@ animation: pulse 1.0s ease-in-out infinite;
   </div>
 </div>
 <div class="done-flash" id="doneFlash"></div>
+
+<!-- Analytics overlay -->
+<div class="analytics-overlay" id="analyticsOverlay">
+  <div class="analytics-panel">
+    <div class="analytics-header">
+      <span class="analytics-title">ERROR ANALYSIS</span>
+      <button class="analytics-close" onclick="hideAnalytics()">✕</button>
+    </div>
+    <div class="analytics-tabs">
+      <button class="atab active" data-period="week"  onclick="showAnalytics('week')">THIS WEEK</button>
+      <button class="atab"        data-period="month" onclick="showAnalytics('month')">THIS MONTH</button>
+      <button class="atab"        data-period="all"   onclick="showAnalytics('all')">ALL TIME</button>
+    </div>
+    <div id="analyticsBody"></div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -274,7 +328,7 @@ function logError(label, btn) {
 
 // ═══════════════════════════════════════════════════════════
 // SESSION TRACKING
-// Each session: { date, start, end, duration, shots }
+// Each session: { date, start, end, duration, shots, errors }
 // Persisted as JSON array in localStorage key 'fg_sessions'
 // ═══════════════════════════════════════════════════════════
 const SESSIONS_KEY = 'fg_sessions';
@@ -310,6 +364,8 @@ function startSession() {
   sessionActive       = true;
   sessionStartTs      = Date.now();
   sessionShotBaseline = shotCount;
+  // Reset error counts so this session starts clean
+  ERROR_TYPES.forEach(e => { errorCounts[e] = 0; document.getElementById('ec-' + e).textContent = ''; document.getElementById('ec-' + e).classList.remove('show'); });
 
   const btn = document.getElementById('sessionBtn');
   btn.classList.add('active');
@@ -332,7 +388,9 @@ function endSession() {
   const shots    = shotCount - sessionShotBaseline;
 
   const sessions = getSessions();
-  sessions.push({ date: dateKey(new Date()), start: sessionStartTs, end: Date.now(), duration, shots });
+  const errors = {};
+  ERROR_TYPES.forEach(e => { if (errorCounts[e]) errors[e] = errorCounts[e]; });
+  sessions.push({ date: dateKey(new Date()), start: sessionStartTs, end: Date.now(), duration, shots, errors });
   localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
 
   sessionActive  = false;
@@ -398,6 +456,126 @@ function updateStats() {
 }
 
 updateStats();
+
+// ═══════════════════════════════════════════════════════════
+// ERROR ANALYTICS
+// ═══════════════════════════════════════════════════════════
+const ERROR_TYPES = ['Rushed','Lifted','Dropped','Peeked','Drifted','Short','Tension','Early'];
+
+function aggregateErrors(sessions) {
+  const totals = {};
+  ERROR_TYPES.forEach(e => totals[e] = 0);
+  let totalShots = 0;
+  for (const s of sessions) {
+    if (s.errors) ERROR_TYPES.forEach(e => { totals[e] += s.errors[e] || 0; });
+    totalShots += s.shots || 0;
+  }
+  const totalErrors = ERROR_TYPES.reduce((a, e) => a + totals[e], 0);
+  return { totals, totalErrors, totalShots };
+}
+
+function sessionsInRange(fromStr, toStr) {
+  return getSessions().filter(s => s.date >= fromStr && (!toStr || s.date < toStr));
+}
+
+function weekStart(d) {
+  const dow = (d.getDay() + 6) % 7;
+  const s = new Date(d); s.setDate(d.getDate() - dow); s.setHours(0,0,0,0); return s;
+}
+
+function buildAnalyticsHTML(period) {
+  const now = new Date();
+  let curFrom, curTo, prevFrom, prevTo, periodLabel;
+
+  if (period === 'week') {
+    const ws = weekStart(now);
+    const lw = new Date(ws); lw.setDate(ws.getDate() - 7);
+    curFrom = dateKey(ws);  curTo = null;
+    prevFrom = dateKey(lw); prevTo = curFrom;
+    periodLabel = 'last week';
+  } else if (period === 'month') {
+    const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lm = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lme = new Date(now.getFullYear(), now.getMonth(), 1);
+    curFrom = dateKey(ms);  curTo = null;
+    prevFrom = dateKey(lm); prevTo = dateKey(lme);
+    periodLabel = 'last month';
+  } else {
+    curFrom = '2000-01-01'; curTo = null;
+    prevFrom = null; prevTo = null;
+    periodLabel = null;
+  }
+
+  const cur = aggregateErrors(sessionsInRange(curFrom, curTo));
+  const prv = prevFrom ? aggregateErrors(sessionsInRange(prevFrom, prevTo)) : null;
+
+  if (cur.totalErrors === 0) {
+    return `<div class="no-data">No errors logged yet.<br><br>Start a session, run reps, and tap error buttons after each shot.<br>Your breakdown patterns will appear here.</div>`;
+  }
+
+  // Sort errors by count, drop zeros
+  const sorted = ERROR_TYPES.filter(e => cur.totals[e] > 0)
+                             .sort((a, b) => cur.totals[b] - cur.totals[a]);
+
+  const top    = sorted[0];
+  const topPct = Math.round(cur.totals[top] / cur.totalErrors * 100);
+
+  // Trend for top fault
+  let trendHTML = '';
+  if (prv && prv.totalErrors > 0) {
+    const prevPct = Math.round(prv.totals[top] / prv.totalErrors * 100);
+    const diff = topPct - prevPct;
+    if      (diff >  3) trendHTML = `<span class="trend worse">↑ +${diff}% vs ${periodLabel}</span>`;
+    else if (diff < -3) trendHTML = `<span class="trend better">↓ ${Math.abs(diff)}% vs ${periodLabel}</span>`;
+    else                trendHTML = `<span class="trend neutral">→ stable vs ${periodLabel}</span>`;
+  }
+
+  // Error rate per 10 shots
+  const rate = cur.totalShots > 0 ? (cur.totalErrors / cur.totalShots * 10).toFixed(1) : null;
+  let rateCompare = '';
+  if (prv && prv.totalShots > 0 && rate !== null) {
+    const prevRate = (prv.totalErrors / prv.totalShots * 10).toFixed(1);
+    const delta = parseFloat(rate) - parseFloat(prevRate);
+    const cls = delta > 0.1 ? 'worse' : delta < -0.1 ? 'better' : 'neutral';
+    rateCompare = `<span class="trend ${cls}">${delta > 0 ? '+' : ''}${delta.toFixed(1)} vs ${periodLabel}</span>`;
+  }
+
+  // Bar rows
+  const bars = sorted.map(e => {
+    const pct = Math.round(cur.totals[e] / cur.totalErrors * 100);
+    return `<div class="error-bar-row">
+      <span class="error-bar-label">${e.toUpperCase()}</span>
+      <div class="error-bar-track"><div class="error-bar-fill" style="width:${pct}%"></div></div>
+      <span class="error-bar-pct">${pct}%</span>
+      <span class="error-bar-cnt">×${cur.totals[e]}</span>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="fault-callout">
+      <div class="fault-label">#1 FAULT</div>
+      <div class="fault-name">${top.toUpperCase()}</div>
+      <div class="fault-sub">${topPct}% of all errors this ${period} ${trendHTML}</div>
+    </div>
+    ${rate !== null ? `
+    <div class="rate-row">
+      <span class="rate-big">${rate}</span>
+      <span class="rate-lbl">errors per 10 shots ${rateCompare}</span>
+    </div>` : ''}
+    <div class="error-bars">${bars}</div>
+    <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${sessionsInRange(curFrom, curTo).length} sessions</div>`;
+}
+
+function showAnalytics(period) {
+  document.getElementById('analyticsOverlay').style.display = 'flex';
+  document.querySelectorAll('.atab').forEach(t =>
+    t.classList.toggle('active', t.dataset.period === period));
+  document.getElementById('analyticsBody').innerHTML = buildAnalyticsHTML(period);
+}
+
+function hideAnalytics() {
+  document.getElementById('analyticsOverlay').style.display = 'none';
+}
 
 // ═══════════════════════════════════════════════════════════
 // STATE
