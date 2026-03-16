@@ -157,6 +157,22 @@ animation: pulse 1.0s ease-in-out infinite;
 .error-totals { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); text-align:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); }
 .no-data { font-family:'Exo 2',sans-serif; font-size:13px; color:var(--text-dim); text-align:center; padding:40px 20px; line-height:1.8; }
 
+/* ── Weekly goal bar ───────────────────────────────────── */
+.goal-section { width:100%; max-width:420px; margin-top:10px; padding:10px 14px; border:1px solid rgba(0,191,255,0.1); border-radius:4px; background:rgba(13,27,42,0.4); }
+.goal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.goal-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:var(--text-dim); }
+.goal-controls { display:flex; align-items:center; gap:8px; }
+.goal-adj { font-family:'Share Tech Mono',monospace; font-size:13px; color:var(--cyan); background:transparent; border:1px solid rgba(0,191,255,0.25); border-radius:3px; width:22px; height:22px; cursor:pointer; outline:none; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+.goal-adj:hover { color:var(--gold); border-color:rgba(201,168,76,0.4); }
+#goalTarget { font-family:'Orbitron',sans-serif; font-size:11px; color:var(--cyan); min-width:30px; text-align:center; }
+.goal-bar-track { height:6px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; margin-bottom:6px; }
+.goal-bar-fill { height:100%; background:linear-gradient(90deg,var(--cyan),var(--gold)); border-radius:3px; transition:width 0.5s ease; }
+.goal-bar-fill.done { background:linear-gradient(90deg,var(--gold),#e8c97a); box-shadow:0 0 8px rgba(201,168,76,0.4); }
+.goal-footer { display:flex; justify-content:space-between; }
+.goal-reps { font-family:'Orbitron',sans-serif; font-size:10px; color:var(--text); }
+.goal-pct  { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); }
+.goal-pct.done { color:var(--gold); }
+
 /* ── Outcome buttons ───────────────────────────────────── */
 .outcome-row { display:flex; gap:8px; width:100%; margin-bottom:12px; }
 .outcome-btn { flex:1; font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; padding:9px 4px; border-radius:4px; cursor:pointer; outline:none; transition:all 0.15s; border:1px solid; background:transparent; }
@@ -265,8 +281,25 @@ animation: pulse 1.0s ease-in-out infinite;
     </div>
   </div>
 
+  <!-- Weekly goal bar -->
+  <div class="goal-section">
+    <div class="goal-header">
+      <span class="goal-label">WEEKLY GOAL</span>
+      <div class="goal-controls">
+        <button class="goal-adj" onclick="adjustGoal(-25)">−</button>
+        <span id="goalTarget">100</span>
+        <button class="goal-adj" onclick="adjustGoal(+25)">+</button>
+      </div>
+    </div>
+    <div class="goal-bar-track"><div class="goal-bar-fill" id="goalBarFill" style="width:0%"></div></div>
+    <div class="goal-footer">
+      <span class="goal-reps" id="goalReps">0 / 100 reps</span>
+      <span class="goal-pct"  id="goalPct">0%</span>
+    </div>
+  </div>
+
   <!-- Analysis trigger -->
-  <button class="analysis-btn" onclick="showAnalytics('week')">▸ ERROR ANALYSIS</button>
+  <button class="analysis-btn" onclick="showAnalytics('week')">▸ SHOT ANALYSIS</button>
 
   <!-- Error log + Outcome -->
   <div class="error-panel" id="errorPanel">
@@ -397,10 +430,11 @@ function logError(label, btn) {
 // Persisted as JSON array in localStorage key 'fg_sessions'
 // ═══════════════════════════════════════════════════════════
 const SESSIONS_KEY = 'fg_sessions';
-let sessionActive       = false;
-let sessionStartTs      = null;   // Date.now() when session began
-let sessionShotBaseline = 0;      // shotCount at session start
-let sessionTickInterval = null;
+let sessionActive        = false;
+let sessionStartTs       = null;   // Date.now() when session began
+let sessionShotBaseline  = 0;      // shotCount at session start
+let sessionAbortCount    = 0;      // reps stopped mid-run this session
+let sessionTickInterval  = null;
 
 function getSessions() {
   try { return JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch { return []; }
@@ -429,6 +463,7 @@ function startSession() {
   sessionActive       = true;
   sessionStartTs      = Date.now();
   sessionShotBaseline = shotCount;
+  sessionAbortCount   = 0;
   // Reset error counts so this session starts clean
   ERROR_TYPES.forEach(e => { errorCounts[e] = 0; document.getElementById('ec-' + e).textContent = ''; document.getElementById('ec-' + e).classList.remove('show'); });
 
@@ -455,7 +490,7 @@ function endSession() {
   const sessions = getSessions();
   const errors = {};
   ERROR_TYPES.forEach(e => { if (errorCounts[e]) errors[e] = errorCounts[e]; });
-  sessions.push({ date: dateKey(new Date()), start: sessionStartTs, end: Date.now(), duration, shots, errors });
+  sessions.push({ date: dateKey(new Date()), start: sessionStartTs, end: Date.now(), duration, shots, aborts: sessionAbortCount, errors });
   localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
 
   sessionActive  = false;
@@ -480,6 +515,7 @@ function sumSessions(sessions, fromDate) {
   return {
     duration: filtered.reduce((a, s) => a + s.duration, 0),
     shots:    filtered.reduce((a, s) => a + s.shots, 0),
+    aborts:   filtered.reduce((a, s) => a + (s.aborts || 0), 0),
     days:     new Set(filtered.map(s => s.date)).size,
   };
 }
@@ -518,9 +554,42 @@ function updateStats() {
   document.getElementById('statWeek').textContent   = formatTime(week.duration);
   document.getElementById('statMonth').textContent  = formatTime(month.duration);
   document.getElementById('statStreak').textContent = streak > 0 ? streak + 'd' : '—';
+  updateGoalBar();
+}
+
+// ═══════════════════════════════════════════════════════════
+// WEEKLY GOAL
+// ═══════════════════════════════════════════════════════════
+const GOAL_KEY = 'fg_weekly_goal';
+
+function getWeeklyGoal() { return parseInt(localStorage.getItem(GOAL_KEY) || '100', 10); }
+
+function setWeeklyGoal(n) {
+  localStorage.setItem(GOAL_KEY, Math.max(25, n));
+  updateGoalBar();
+}
+
+function adjustGoal(delta) { setWeeklyGoal(getWeeklyGoal() + delta); }
+
+function updateGoalBar() {
+  const goal = getWeeklyGoal();
+  const now  = new Date();
+  const dow  = (now.getDay() + 6) % 7;
+  const ws   = new Date(now); ws.setDate(now.getDate() - dow); ws.setHours(0,0,0,0);
+  const reps = sumSessions(getSessions(), ws).shots;
+  const pct  = Math.min(100, Math.round(reps / goal * 100));
+  const done = reps >= goal;
+
+  document.getElementById('goalTarget').textContent      = goal;
+  document.getElementById('goalBarFill').style.width     = pct + '%';
+  document.getElementById('goalBarFill').className       = 'goal-bar-fill' + (done ? ' done' : '');
+  document.getElementById('goalReps').textContent        = reps + ' / ' + goal + ' reps';
+  document.getElementById('goalPct').textContent         = pct + '%';
+  document.getElementById('goalPct').className           = 'goal-pct' + (done ? ' done' : '');
 }
 
 updateStats();
+updateGoalBar();
 
 // ═══════════════════════════════════════════════════════════
 // ERROR ANALYTICS
@@ -674,6 +743,34 @@ function buildAnalyticsHTML(period) {
       ${pvrRows ? `<div class="pvr-section"><div class="pvr-header">PROCESS vs RESULT</div>${pvrRows}${insight}</div>` : ''}`;
   }
 
+  // ── Completion rate section ──────────────────────────────
+  const periodSessions = sessionsInRange(curFrom, curTo);
+  const totalAborts    = periodSessions.reduce((a, s) => a + (s.aborts || 0), 0);
+  const totalCompleted = cur.totalShots;
+  const totalAttempts  = totalCompleted + totalAborts;
+  let completionHTML = '';
+  if (totalAttempts > 0) {
+    const compPct = Math.round(totalCompleted / totalAttempts * 100);
+    const compCls = compPct >= 85 ? 'good' : compPct >= 65 ? 'mid' : 'bad';
+    completionHTML = `
+      <div class="section-divider"></div>
+      <div class="section-title">COMPLETION RATE</div>
+      <div class="pvr-section">
+        <div class="pvr-row">
+          <span class="pvr-desc">Completed reps</span>
+          <span class="pvr-rate ${compCls}">${compPct}%</span>
+          <span class="pvr-n">×${totalCompleted}</span>
+        </div>
+        <div class="pvr-row">
+          <span class="pvr-desc">Aborted reps</span>
+          <span class="pvr-rate"></span>
+          <span class="pvr-n">×${totalAborts}</span>
+        </div>
+        ${compPct < 65 ? `<div class="pvr-insight">High abort rate — focus on committing to the full sequence before tapping PLAY.</div>` :
+          compPct >= 90 ? `<div class="pvr-insight">Excellent discipline. Full-routine reps are building the deepest grooves.</div>` : ''}
+      </div>`;
+  }
+
   return `
     <div class="fault-callout">
       <div class="fault-label">#1 FAULT</div>
@@ -686,8 +783,9 @@ function buildAnalyticsHTML(period) {
       <span class="rate-lbl">errors per 10 shots ${rateCompare}</span>
     </div>` : ''}
     <div class="error-bars">${bars}</div>
-    <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${sessionsInRange(curFrom, curTo).length} sessions</div>
-    ${outcomeHTML}`;
+    <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${periodSessions.length} sessions</div>
+    ${outcomeHTML}
+    ${completionHTML}`;
 }
 
 function showAnalytics(period) {
@@ -928,9 +1026,11 @@ function finish() {
   playCrystalBowl();
   renderComplete();
   if (sessionActive) updateStats();
+  updateGoalBar();
 }
 
 function stop() {
+  if (running) sessionAbortCount++;  // mid-rep abort
   running = false;
   runId++;
   releaseWakeLock();

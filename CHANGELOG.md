@@ -1,5 +1,24 @@
 # Flash Gordon — Changelog
 
+## v2.4.0 — 2026-03-16
+
+### Weekly Volume Goal (#5) & Routine Completion Rate (#4)
+
+- **Weekly Volume Goal bar**: always-visible progress bar between stats strip and
+  analysis button. Shows `reps / goal` count and percentage. Week is Mon–Sun.
+  - Goal adjustable in +25/−25 increments (min 25) via − / + buttons
+  - Bar turns gold when goal is reached; updates live after every completed rep
+- **Abort tracking**: `stop()` during a live rep increments `sessionAbortCount`;
+  stored as `aborts` in each session record
+- **Completion Rate** panel added to SHOT ANALYSIS:
+  - Shows completed vs aborted reps with a colour-coded percentage (green ≥ 85%,
+    amber ≥ 65%, red below)
+  - Diagnostic: high abort rate prompts commitment cue; ≥ 90% gives positive
+    reinforcement
+  - Appears only when abort data is present for the selected period
+
+---
+
 ## v2.3.0 — 2026-03-16
 
 ### Shot outcome log — process vs result separation
