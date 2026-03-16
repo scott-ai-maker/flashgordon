@@ -1,0 +1,54 @@
+# Flash Gordon — Changelog
+
+## v2.0.0 — 2026-03-16
+
+### Orthodox Fundamentals System — Full Rewrite
+
+Complete replacement of the 17-step wisdom-based routine with a strict
+10-beat Orthodox Fundamentals pre-shot system based on Mark Wilson's
+*Play Great Pool*. Tempo fixed at 60 BPM (1 second per beat).
+
+**Sequence (10 beats):**
+1. COMMIT — Decision: lock in shot, speed, leave
+2. STEP — Approach: lead foot into the line of aim
+3. DOWN — Placement: drop into stance, tip near cue ball
+4. CHECK — Verify: CB → OB → CB eye travel, confirm aim
+5. STROKE — Rhythm 1: first slow straight practice swing
+6. MATCH — Rhythm 2: second swing, match intended length
+7. STILL — Final Pause: total stillness, final visual check
+8. SHIFT — Transition: eyes lock target, slow backswing begins
+9. THROUGH — Delivery: fixed elbow, smooth acceleration
+10. HOLD — Evaluate: total stillness, evaluate tip position
+
+**Audio additions:**
+- `pause` click type (380 Hz, longer decay) for Beat 7 — distinctly
+  lower than all other beats to signal the non-negotiable stop
+- Beat 9 "Through" spoken at rate 0.70 (vs 0.84 standard) for a
+  warmer, slower voice cadence on the delivery cue
+- Crystal singing bowl (432 Hz fundamental + 864 Hz shimmer + 216 Hz
+  sub, 3.5s natural decay) plays on routine completion
+- Post-stroke "Read" voice cue spoken 800ms into the bowl tone (0.72 rate)
+
+**Error log panel:**
+- Appears after each completed shot
+- 8 error types: RUSHED, LIFTED, DROPPED, PEEKED, DRIFTED, SHORT,
+  TENSION, EARLY
+- Each tap: flashes button, speaks the label, increments session count badge
+
+**UI:**
+- Beat indicator expanded from 4 dots to 10 (one per beat)
+- Removed wisdom library and category filter (replaced by fixed sequence)
+
+**Branding alignment (flashgordonpool.com):**
+- Gold updated from `#f5c400` to `#C9A84C` (muted antique brass)
+- Title treatment changed to FLASH (white) · GORDON (gold) matching site
+- All gold glows/shadows updated to `rgba(201,168,76,…)`
+- Play button gradient updated to muted brass
+
+---
+
+## v1.0.0 — prior
+
+Initial pre-shot routine trainer. 17-step sequence with shuffled wisdom
+library (62 tips across 5 categories), adjustable BPM 50–120, PWA
+with offline support and wake lock.
