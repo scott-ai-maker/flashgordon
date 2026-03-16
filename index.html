@@ -18,28 +18,26 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { height:100%; background:var(--dark); color:var(--text); font-family:'Exo 2',sans-serif; overflow:hidden; }
 
-  /* Grid overlay — matches flashgordonpool.com */
   body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
     background-image:linear-gradient(rgba(0,191,255,.04) 1px,transparent 0),linear-gradient(90deg,rgba(0,191,255,.04) 1px,transparent 0);
     background-size:60px 60px; }
-  /* Ambient radial glows */
   body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
     background:
       radial-gradient(ellipse at 50% 0%,rgba(0,191,255,0.07) 0%,transparent 55%),
       radial-gradient(ellipse at 85% 100%,rgba(201,168,76,0.06) 0%,transparent 45%); }
 
-.app { height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 20px; position:relative; z-index:1; }
+.app { height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; position:relative; z-index:1; }
 
 .bpm-badge { position:absolute; top:20px; right:20px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); text-align:right; line-height:1.6; }
 .bpm-badge span { display:block; font-size:18px; letter-spacing:1px; color:var(--cyan); }
 
-.title-block { text-align:center; margin-bottom:28px; }
+.title-block { text-align:center; margin-bottom:18px; }
 .title-sub { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:6px; color:var(--cyan); margin-bottom:6px; opacity:0.7; }
-h1 { font-family:'Orbitron',sans-serif; font-weight:900; font-size:clamp(32px,10vw,62px); letter-spacing:6px; line-height:1; }
+h1 { font-family:'Orbitron',sans-serif; font-weight:900; font-size:clamp(28px,9vw,58px); letter-spacing:6px; line-height:1; }
 h1 .word-flash  { color:var(--text); filter:drop-shadow(0 0 12px rgba(232,232,232,0.2)); }
 h1 .word-gordon { color:var(--gold); filter:drop-shadow(0 0 18px rgba(201,168,76,0.55)) drop-shadow(0 0 36px rgba(201,168,76,0.25)); }
 
-.phase-display { width:100%; max-width:420px; background:rgba(13,27,42,0.85); border:1px solid rgba(0,191,255,0.2); border-radius:6px; padding:20px 24px; margin-bottom:20px; min-height:100px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;
+.phase-display { width:100%; max-width:420px; background:rgba(13,27,42,0.85); border:1px solid rgba(0,191,255,0.2); border-radius:6px; padding:18px 24px; margin-bottom:14px; min-height:96px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;
   box-shadow:0 0 20px rgba(0,191,255,.08), inset 0 0 40px rgba(0,191,255,.02); }
 .phase-display::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--bar-color,var(--cyan)),transparent); opacity:0.6; }
 
@@ -50,19 +48,18 @@ h1 .word-gordon { color:var(--gold); filter:drop-shadow(0 0 18px rgba(201,168,76
 .phase-cue.red  { color:var(--red);  text-shadow:0 0 20px rgba(255,68,68,.6); }
 .phase-detail { font-family:'Exo 2',sans-serif; font-size:12px; letter-spacing:0.5px; color:var(--text-dim); margin-top:6px; font-weight:400; }
 
-/* 10-dot beat row */
-.beat-row { display:flex; gap:8px; margin-bottom:20px; }
+.beat-row { display:flex; gap:8px; margin-bottom:14px; }
 .beat-dot { width:10px; height:10px; border-radius:50%; background:var(--dark3); border:1px solid rgba(0,191,255,0.15); transition:all 0.05s; }
 .beat-dot.on-gold { background:var(--gold); box-shadow:0 0 20px rgba(201,168,76,.4),0 0 40px rgba(201,168,76,.2); transform:scale(1.3); }
 .beat-dot.on-cyan { background:var(--cyan); box-shadow:0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2); transform:scale(1.3); }
 .beat-dot.on-red  { background:var(--red);  box-shadow:0 0 20px rgba(255,68,68,.4); transform:scale(1.3); }
 .beat-dot.on-     { background:var(--text); box-shadow:0 0 8px rgba(232,232,232,0.4); transform:scale(1.3); }
 
-.progress-track { width:100%; max-width:420px; height:2px; background:rgba(0,191,255,0.1); border-radius:1px; margin-bottom:24px; overflow:hidden; }
+.progress-track { width:100%; max-width:420px; height:2px; background:rgba(0,191,255,0.1); border-radius:1px; margin-bottom:18px; overflow:hidden; }
 .progress-fill  { height:100%; background:linear-gradient(90deg,var(--cyan),var(--gold)); width:0%; transition:width 0.15s linear; }
 
 .play-btn {
-width:120px; height:120px; border-radius:50%;
+width:110px; height:110px; border-radius:50%;
 background: radial-gradient(circle at 38% 35%, #e8c97a, #C9A84C 45%, #7a5c20 100%);
 border: 3px solid rgba(201,168,76,0.4);
 box-shadow: 0 4px 0 rgba(60,40,0,0.8), 0 6px 30px rgba(201,168,76,0.35), 0 0 20px rgba(201,168,76,.4),0 0 40px rgba(201,168,76,.2), inset 0 2px 4px rgba(232,201,122,0.3);
@@ -78,17 +75,17 @@ box-shadow: 0 4px 0 #000, 0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2
 animation: pulse 1.0s ease-in-out infinite;
 }
 @keyframes pulse { 0%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 0 rgba(0,191,255,0.5)} 70%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 20px rgba(0,191,255,0)} 100%{box-shadow:0 4px 0 #000,0 0 20px rgba(0,191,255,.4),0 0 0 0 rgba(0,191,255,0)} }
-.play-icon { font-size:48px; color:#1a0e00; margin-left:6px; line-height:1; filter:drop-shadow(0 1px 0 rgba(232,201,122,0.5)); }
-.stop-icon { width:28px; height:28px; background:var(--cyan); border-radius:3px; display:none; box-shadow:0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2); }
+.play-icon { font-size:44px; color:#1a0e00; margin-left:6px; line-height:1; filter:drop-shadow(0 1px 0 rgba(232,201,122,0.5)); }
+.stop-icon { width:26px; height:26px; background:var(--cyan); border-radius:3px; display:none; box-shadow:0 0 20px rgba(0,191,255,.4),0 0 40px rgba(0,191,255,.2); }
 .play-btn.playing .play-icon { display:none; }
 .play-btn.playing .stop-icon { display:block; }
 
-.btn-label  { margin-top:10px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:4px; color:var(--text-dim); }
-.idle-hint  { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); margin-top:14px; opacity:0.5; }
+.btn-label  { margin-top:8px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:4px; color:var(--text-dim); }
+.idle-hint  { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); margin-top:8px; opacity:0.5; }
 .done-flash { position:fixed; inset:0; background:rgba(201,168,76,0.05); pointer-events:none; opacity:0; transition:opacity 0.1s; z-index:50; }
 .done-flash.show { opacity:1; }
 
-.bpm-control { display:flex; align-items:center; margin-top:16px; }
+.bpm-control { display:flex; align-items:center; margin-top:12px; }
 .bpm-adj { font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--cyan); background:transparent; border:1px solid rgba(0,191,255,0.3); width:30px; height:30px; cursor:pointer; transition:all 0.2s; outline:none; display:flex; align-items:center; justify-content:center; line-height:1; }
 .bpm-adj:first-child { border-radius:15px 0 0 15px; }
 .bpm-adj:last-child  { border-radius:0 15px 15px 0; }
@@ -99,8 +96,34 @@ animation: pulse 1.0s ease-in-out infinite;
 .shot-counter { position:absolute; top:20px; left:20px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--text-dim); text-align:left; line-height:1.6; }
 .shot-counter span { display:block; font-size:18px; letter-spacing:1px; color:var(--cyan); }
 
-/* Error log panel */
-.error-panel { display:none; width:100%; max-width:420px; margin-top:14px; }
+/* ── Session panel ─────────────────────────────────────── */
+.session-panel { display:flex; justify-content:center; margin-top:12px; }
+.session-btn {
+  font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:3px;
+  color:var(--text-dim); background:transparent;
+  border:1px solid rgba(0,191,255,0.25); border-radius:20px;
+  padding:7px 20px; cursor:pointer; transition:all 0.2s; outline:none;
+  display:flex; align-items:center; gap:10px;
+}
+.session-btn:hover { color:var(--cyan); border-color:rgba(0,191,255,0.5); }
+.session-btn.active {
+  color:var(--red); border-color:rgba(255,68,68,0.5);
+  background:rgba(255,68,68,0.05);
+  box-shadow:0 0 12px rgba(255,68,68,0.15);
+}
+.session-live { font-family:'Orbitron',sans-serif; font-size:13px; color:var(--red); letter-spacing:1px; display:none; }
+.session-btn.active .session-live { display:inline; }
+
+/* ── Stats strip ───────────────────────────────────────── */
+.stats-strip { display:flex; width:100%; max-width:420px; margin-top:10px; border:1px solid rgba(0,191,255,0.1); border-radius:4px; overflow:hidden; }
+.stat-cell { flex:1; text-align:center; padding:7px 2px; border-right:1px solid rgba(0,191,255,0.1); }
+.stat-cell:last-child { border-right:none; }
+.stat-val { font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:1px; color:var(--cyan); }
+.stat-val.gold { color:var(--gold); }
+.stat-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:3px; color:var(--text-dim); margin-top:3px; }
+
+/* ── Error log panel ───────────────────────────────────── */
+.error-panel { display:none; width:100%; max-width:420px; margin-top:12px; }
 .error-panel-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:8px; text-align:center; }
 .error-btns { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
 .err-btn { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); background:transparent; border:1px solid rgba(255,68,68,0.25); border-radius:3px; padding:5px 10px; cursor:pointer; transition:all 0.15s; outline:none; position:relative; }
@@ -148,6 +171,36 @@ animation: pulse 1.0s ease-in-out infinite;
     <span class="bpm-val" id="bpmVal">60 BPM</span>
     <button class="bpm-adj" id="bpmUp" onclick="adjustBPM(+5)">+</button>
   </div>
+
+  <!-- Session panel -->
+  <div class="session-panel">
+    <button class="session-btn" id="sessionBtn" onclick="toggleSession()">
+      <span id="sessionBtnText">● START SESSION</span>
+      <span class="session-live" id="sessionLive">00:00</span>
+    </button>
+  </div>
+
+  <!-- Stats strip: DAY · WEEK · MONTH · STREAK -->
+  <div class="stats-strip">
+    <div class="stat-cell">
+      <div class="stat-val" id="statDay">—</div>
+      <div class="stat-lbl">TODAY</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" id="statWeek">—</div>
+      <div class="stat-lbl">WEEK</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val" id="statMonth">—</div>
+      <div class="stat-lbl">MONTH</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val gold" id="statStreak">—</div>
+      <div class="stat-lbl">STREAK</div>
+    </div>
+  </div>
+
+  <!-- Error log -->
   <div class="error-panel" id="errorPanel">
     <div class="error-panel-label">— log error —</div>
     <div class="error-btns">
@@ -166,10 +219,10 @@ animation: pulse 1.0s ease-in-out infinite;
 
 <script>
 // ═══════════════════════════════════════════════════════════
-// TEMPO — exact, never rounded
+// TEMPO
 // ═══════════════════════════════════════════════════════════
 let BPM     = 60;
-let BEAT_MS = 60000 / BPM;   // 1000ms at 60 BPM
+let BEAT_MS = 60000 / BPM;
 
 function adjustBPM(delta) {
   if (running) return;
@@ -187,26 +240,16 @@ function adjustBPM(delta) {
 function buildSequence() {
   const B = BEAT_MS;
   return [
-    // 0  COMMIT — Decision
-    { ms:B, phase:'BEAT 1',  label:'DECISION',   cue:'COMMIT',  detail:'lock in shot · speed · leave',              color:'gold', click:'hi',    speak:'Commit'                    },
-    // 1  STEP — Approach
-    { ms:B, phase:'BEAT 2',  label:'APPROACH',   cue:'STEP',    detail:'lead foot into the line of aim',            color:'cyan', click:'mid',   speak:'Step'                      },
-    // 2  DOWN — Placement
-    { ms:B, phase:'BEAT 3',  label:'PLACEMENT',  cue:'DOWN',    detail:'drop into stance · tip near cue ball',      color:'gold', click:'mid',   speak:'Down'                      },
-    // 3  CHECK — Verification
-    { ms:B, phase:'BEAT 4',  label:'VERIFY',     cue:'CHECK',   detail:'CB → OB → CB · confirm aim',                color:'cyan', click:'soft',  speak:'Check'                     },
-    // 4  STROKE — Rhythm 1
-    { ms:B, phase:'BEAT 5',  label:'RHYTHM 1',   cue:'STROKE',  detail:'first slow straight practice swing',        color:'gold', click:'mid',   speak:'Stroke'                    },
-    // 5  MATCH — Rhythm 2
-    { ms:B, phase:'BEAT 6',  label:'RHYTHM 2',   cue:'MATCH',   detail:'second swing · match intended length',      color:'cyan', click:'mid',   speak:'Match'                     },
-    // 6  STILL — Final Pause (lower tone — non-negotiable stop)
-    { ms:B, phase:'BEAT 7',  label:'PAUSE',      cue:'STILL',   detail:'total stillness · final visual check',      color:'red',  click:'pause', speak:'Still'                     },
-    // 7  SHIFT — Transition
-    { ms:B, phase:'BEAT 8',  label:'TRANSITION', cue:'SHIFT',   detail:'eyes lock target · slow backswing begins',  color:'gold', click:'slow',  speak:'Shift'                     },
-    // 8  THROUGH — Delivery (spoken slower/warmer)
-    { ms:B, phase:'BEAT 9',  label:'DELIVERY',   cue:'THROUGH', detail:'fixed elbow · smooth acceleration',         color:'gold', click:'shoot', speak:'Through', speakRate:0.70   },
-    // 9  HOLD — Evaluation
-    { ms:B, phase:'BEAT 10', label:'EVALUATE',   cue:'HOLD',    detail:'total stillness · evaluate tip position',   color:'red',  click:'soft',  speak:'Hold'                      },
+    { ms:B, phase:'BEAT 1',  label:'DECISION',   cue:'COMMIT',  detail:'lock in shot · speed · leave',              color:'gold', click:'hi',    speak:'Commit'                  },
+    { ms:B, phase:'BEAT 2',  label:'APPROACH',   cue:'STEP',    detail:'lead foot into the line of aim',            color:'cyan', click:'mid',   speak:'Step'                    },
+    { ms:B, phase:'BEAT 3',  label:'PLACEMENT',  cue:'DOWN',    detail:'drop into stance · tip near cue ball',      color:'gold', click:'mid',   speak:'Down'                    },
+    { ms:B, phase:'BEAT 4',  label:'VERIFY',     cue:'CHECK',   detail:'CB → OB → CB · confirm aim',                color:'cyan', click:'soft',  speak:'Check'                   },
+    { ms:B, phase:'BEAT 5',  label:'RHYTHM 1',   cue:'STROKE',  detail:'first slow straight practice swing',        color:'gold', click:'mid',   speak:'Stroke'                  },
+    { ms:B, phase:'BEAT 6',  label:'RHYTHM 2',   cue:'MATCH',   detail:'second swing · match intended length',      color:'cyan', click:'mid',   speak:'Match'                   },
+    { ms:B, phase:'BEAT 7',  label:'PAUSE',      cue:'STILL',   detail:'total stillness · final visual check',      color:'red',  click:'pause', speak:'Still'                   },
+    { ms:B, phase:'BEAT 8',  label:'TRANSITION', cue:'SHIFT',   detail:'eyes lock target · slow backswing begins',  color:'gold', click:'slow',  speak:'Shift'                   },
+    { ms:B, phase:'BEAT 9',  label:'DELIVERY',   cue:'THROUGH', detail:'fixed elbow · smooth acceleration',         color:'gold', click:'shoot', speak:'Through', speakRate:0.70 },
+    { ms:B, phase:'BEAT 10', label:'EVALUATE',   cue:'HOLD',    detail:'total stillness · evaluate tip position',   color:'red',  click:'soft',  speak:'Hold'                    },
   ];
 }
 
@@ -218,23 +261,143 @@ const errorCounts = {};
 function logError(label, btn) {
   errorCounts[label] = (errorCounts[label] || 0) + 1;
   const countEl = document.getElementById('ec-' + label);
-  if (countEl) {
-    countEl.textContent = errorCounts[label];
-    countEl.classList.add('show');
-  }
-  if (btn) {
-    btn.classList.add('hit');
-    setTimeout(() => btn.classList.remove('hit'), 350);
-  }
+  if (countEl) { countEl.textContent = errorCounts[label]; countEl.classList.add('show'); }
+  if (btn) { btn.classList.add('hit'); setTimeout(() => btn.classList.remove('hit'), 350); }
   if (window.speechSynthesis) {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(label);
     u.rate = 0.88; u.pitch = 0.88; u.volume = 0.85;
-    const v = getBestVoice();
-    if (v) u.voice = v;
+    const v = getBestVoice(); if (v) u.voice = v;
     window.speechSynthesis.speak(u);
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// SESSION TRACKING
+// Each session: { date, start, end, duration, shots }
+// Persisted as JSON array in localStorage key 'fg_sessions'
+// ═══════════════════════════════════════════════════════════
+const SESSIONS_KEY = 'fg_sessions';
+let sessionActive       = false;
+let sessionStartTs      = null;   // Date.now() when session began
+let sessionShotBaseline = 0;      // shotCount at session start
+let sessionTickInterval = null;
+
+function getSessions() {
+  try { return JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch { return []; }
+}
+
+function dateKey(d) { return new Date(d).toISOString().slice(0, 10); }
+
+function formatTime(ms) {
+  if (!ms || ms < 1000) return '—';
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  const h = Math.floor(m / 60);
+  if (h > 0) return h + 'h ' + (m % 60 > 0 ? (m % 60) + 'm' : '');
+  if (m > 0) return m + 'm' + (s % 60 > 0 ? ' ' + (s % 60) + 's' : '');
+  return s + 's';
+}
+
+function formatClock(ms) {
+  // MM:SS for the live session timer
+  const s = Math.floor(ms / 1000);
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+
+function startSession() {
+  if (sessionActive) return;
+  sessionActive       = true;
+  sessionStartTs      = Date.now();
+  sessionShotBaseline = shotCount;
+
+  const btn = document.getElementById('sessionBtn');
+  btn.classList.add('active');
+  document.getElementById('sessionBtnText').textContent = '■ END SESSION';
+
+  // Tick the live timer every second
+  sessionTickInterval = setInterval(() => {
+    document.getElementById('sessionLive').textContent =
+      formatClock(Date.now() - sessionStartTs);
+  }, 1000);
+
+  updateStats();
+}
+
+function endSession() {
+  if (!sessionActive) return;
+  clearInterval(sessionTickInterval);
+
+  const duration = Date.now() - sessionStartTs;
+  const shots    = shotCount - sessionShotBaseline;
+
+  const sessions = getSessions();
+  sessions.push({ date: dateKey(new Date()), start: sessionStartTs, end: Date.now(), duration, shots });
+  localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+
+  sessionActive  = false;
+  sessionStartTs = null;
+
+  const btn = document.getElementById('sessionBtn');
+  btn.classList.remove('active');
+  document.getElementById('sessionBtnText').textContent = '● START SESSION';
+  document.getElementById('sessionLive').textContent    = '00:00';
+
+  updateStats();
+}
+
+function toggleSession() { if (sessionActive) endSession(); else startSession(); }
+
+// Auto-end session if user closes/navigates away
+window.addEventListener('beforeunload', () => { if (sessionActive) endSession(); });
+
+// ── Stats computation ───────────────────────────────────
+function sumSessions(sessions, fromDate) {
+  const filtered = sessions.filter(s => new Date(s.date) >= fromDate);
+  return {
+    duration: filtered.reduce((a, s) => a + s.duration, 0),
+    shots:    filtered.reduce((a, s) => a + s.shots, 0),
+    days:     new Set(filtered.map(s => s.date)).size,
+  };
+}
+
+function calcStreak() {
+  const sessions = getSessions();
+  if (!sessions.length) return 0;
+  const dates = [...new Set(sessions.map(s => s.date))].sort().reverse();
+  const today = dateKey(new Date());
+  const yesterday = dateKey(new Date(Date.now() - 86400000));
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+  let streak = 1;
+  for (let i = 1; i < dates.length; i++) {
+    if (Math.round((new Date(dates[i-1]) - new Date(dates[i])) / 86400000) === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function updateStats() {
+  const sessions = getSessions();
+  const now      = new Date();
+
+  const today = sumSessions(sessions, new Date(dateKey(now)));
+
+  const dow       = (now.getDay() + 6) % 7;  // Mon = 0
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - dow); weekStart.setHours(0,0,0,0);
+  const week = sumSessions(sessions, weekStart);
+
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const month = sumSessions(sessions, monthStart);
+
+  const streak = calcStreak();
+
+  document.getElementById('statDay').textContent    = formatTime(today.duration);
+  document.getElementById('statWeek').textContent   = formatTime(week.duration);
+  document.getElementById('statMonth').textContent  = formatTime(month.duration);
+  document.getElementById('statStreak').textContent = streak > 0 ? streak + 'd' : '—';
+}
+
+updateStats();
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -245,13 +408,11 @@ let runId     = 0;
 let shotCount = 0;
 
 // ═══════════════════════════════════════════════════════════
-// WAKE LOCK — keep screen on during routine
+// WAKE LOCK
 // ═══════════════════════════════════════════════════════════
 let wakeLock = null;
 async function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    try { wakeLock = await navigator.wakeLock.request('screen'); } catch {}
-  }
+  if ('wakeLock' in navigator) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
 }
 function releaseWakeLock() {
   if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
@@ -264,9 +425,7 @@ document.addEventListener('visibilitychange', () => {
 // AUDIO
 // ═══════════════════════════════════════════════════════════
 function initAudio() {
-  if (!audioCtx || audioCtx.state === 'closed') {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  if (!audioCtx || audioCtx.state === 'closed') audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
@@ -277,54 +436,32 @@ function playClick(type, when) {
     mid:   [[800,  0.85, 0.055]],
     soft:  [[500,  0.70, 0.05]],
     slow:  [[560,  0.80, 0.08]],
-    pause: [[380,  0.75, 0.12]],                           // Beat 7 — lower, resonant
+    pause: [[380,  0.75, 0.12]],
     shoot: [[120,  1.0,  0.12], [1400, 0.95, 0.07]],
   };
   (map[type] || []).forEach(([freq, amp, dur]) => {
-    const osc = audioCtx.createOscillator();
-    const env = audioCtx.createGain();
-    osc.connect(env);
-    env.connect(audioCtx.destination);
+    const osc = audioCtx.createOscillator(), env = audioCtx.createGain();
+    osc.connect(env); env.connect(audioCtx.destination);
     osc.frequency.value = freq;
     env.gain.setValueAtTime(0, when);
     env.gain.linearRampToValueAtTime(amp, when + 0.008);
     env.gain.exponentialRampToValueAtTime(0.001, when + dur);
-    osc.start(when);
-    osc.stop(when + dur + 0.02);
+    osc.start(when); osc.stop(when + dur + 0.02);
   });
 }
 
-// ── Crystal singing bowl — 432 Hz fundamental + harmonics, ~3.5s natural decay
 function playCrystalBowl() {
   if (!audioCtx) return;
   const now = audioCtx.currentTime + 0.05;
-
-  // Fundamental: 432 Hz
-  const o1 = audioCtx.createOscillator(), g1 = audioCtx.createGain();
-  o1.connect(g1); g1.connect(audioCtx.destination);
-  o1.type = 'sine'; o1.frequency.value = 432;
-  g1.gain.setValueAtTime(0, now);
-  g1.gain.linearRampToValueAtTime(0.35, now + 0.12);
-  g1.gain.exponentialRampToValueAtTime(0.001, now + 3.5);
-  o1.start(now); o1.stop(now + 3.6);
-
-  // 2nd harmonic: 864 Hz (shimmer)
-  const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
-  o2.connect(g2); g2.connect(audioCtx.destination);
-  o2.type = 'sine'; o2.frequency.value = 864;
-  g2.gain.setValueAtTime(0, now);
-  g2.gain.linearRampToValueAtTime(0.12, now + 0.06);
-  g2.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
-  o2.start(now); o2.stop(now + 2.1);
-
-  // Sub: 216 Hz (body)
-  const o3 = audioCtx.createOscillator(), g3 = audioCtx.createGain();
-  o3.connect(g3); g3.connect(audioCtx.destination);
-  o3.type = 'sine'; o3.frequency.value = 216;
-  g3.gain.setValueAtTime(0, now);
-  g3.gain.linearRampToValueAtTime(0.10, now + 0.08);
-  g3.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
-  o3.start(now); o3.stop(now + 2.6);
+  [[432, 0.35, 0.12, 3.5], [864, 0.12, 0.06, 2.0], [216, 0.10, 0.08, 2.5]].forEach(([freq, amp, atk, rel]) => {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(amp, now + atk);
+    g.gain.exponentialRampToValueAtTime(0.001, now + rel);
+    o.start(now); o.stop(now + rel + 0.1);
+  });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -333,50 +470,37 @@ function playCrystalBowl() {
 function getBestVoice() {
   const vs = window.speechSynthesis.getVoices();
   if (!vs.length) return null;
-  return vs.find(v => v.name === 'Daniel')
-      || vs.find(v => v.name === 'Alex')
-      || vs.find(v => v.name === 'Samantha')
-      || vs.find(v => v.name.includes('Google US English'))
-      || vs.find(v => v.lang === 'en-US')
-      || vs.find(v => v.lang && v.lang.startsWith('en'))
-      || vs[0];
+  return vs.find(v => v.name === 'Daniel') || vs.find(v => v.name === 'Alex')
+      || vs.find(v => v.name === 'Samantha') || vs.find(v => v.name.includes('Google US English'))
+      || vs.find(v => v.lang === 'en-US') || vs.find(v => v.lang && v.lang.startsWith('en')) || vs[0];
 }
 
-// iOS Safari requires speechSynthesis.speak() synchronously in the gesture.
-// Strategy: silent unlock utterance on tap, then chain via onend + setTimeout.
 let speechActive = false;
 
 function makeSpeechUtterance(text, rate = 0.84) {
   const u = new SpeechSynthesisUtterance(text);
-  u.rate   = rate;
-  u.pitch  = 0.95;
-  u.volume = 1.0;
-  const v  = getBestVoice();
-  if (v) u.voice = v;
+  u.rate = rate; u.pitch = 0.95; u.volume = 1.0;
+  const v = getBestVoice(); if (v) u.voice = v;
   return u;
 }
 
 function speakNext(plan, idx, startMs, myRunId) {
   if (idx >= plan.length) { speechActive = false; return; }
-  if (runId !== myRunId)  { speechActive = false; return; }  // stop() bumps runId
-
-  const item   = plan[idx];
-  const waitMs = Math.max(0, startMs + item.delayMs - performance.now());
-
+  if (runId !== myRunId)  { speechActive = false; return; }
+  const item = plan[idx];
   setTimeout(() => {
     if (runId !== myRunId) { speechActive = false; return; }
     const u = makeSpeechUtterance(item.text, item.rate || 0.84);
     u.onend  = () => speakNext(plan, idx + 1, startMs, myRunId);
     u.onerror = () => speakNext(plan, idx + 1, startMs, myRunId);
     window.speechSynthesis.speak(u);
-  }, waitMs);
+  }, Math.max(0, startMs + item.delayMs - performance.now()));
 }
 
 function unlockAndSpeak(plan, myRunId) {
   const silent = new SpeechSynthesisUtterance(' ');
   silent.volume = 0; silent.rate = 2;
-  const v = getBestVoice();
-  if (v) silent.voice = v;
+  const v = getBestVoice(); if (v) silent.voice = v;
   const startMs = performance.now();
   silent.onend  = () => speakNext(plan, 0, startMs, myRunId);
   silent.onerror = () => speakNext(plan, 0, startMs, myRunId);
@@ -395,14 +519,9 @@ function renderStep(s, idx, total) {
   document.getElementById('phaseCue').textContent    = s.cue;
   document.getElementById('phaseCue').className      = 'phase-cue ' + (s.color || '');
   document.getElementById('phaseDetail').textContent = s.detail;
-
-  for (let i = 0; i < NUM_BEATS; i++) {
-    document.getElementById('d' + i).className =
-      'beat-dot' + (i === idx ? ' on-' + (s.color || '') : '');
-  }
-
-  document.getElementById('progressFill').style.width =
-    Math.round((idx + 1) / total * 100) + '%';
+  for (let i = 0; i < NUM_BEATS; i++)
+    document.getElementById('d' + i).className = 'beat-dot' + (i === idx ? ' on-' + (s.color || '') : '');
+  document.getElementById('progressFill').style.width = Math.round((idx + 1) / total * 100) + '%';
 }
 
 function renderReady() {
@@ -422,8 +541,7 @@ function renderComplete() {
   document.getElementById('phaseDetail').textContent = 'hold the finish · evaluate tip position';
   document.getElementById('progressFill').style.width = '100%';
   const fl = document.getElementById('doneFlash');
-  fl.classList.add('show');
-  setTimeout(() => fl.classList.remove('show'), 350);
+  fl.classList.add('show'); setTimeout(() => fl.classList.remove('show'), 350);
   document.getElementById('errorPanel').style.display = 'block';
 }
 
@@ -437,29 +555,17 @@ function setButtons(playing) {
 
 // ═══════════════════════════════════════════════════════════
 // ENGINE
-// Chain of setTimeout calls — each step schedules the next.
-// runId guards against orphaned callbacks after stop().
 // ═══════════════════════════════════════════════════════════
 function runStep(seq, idx, myRunId) {
   if (!running || runId !== myRunId) return;
-
-  const s     = seq[idx];
-  const total = seq.length;
-
-  renderStep(s, idx, total);
-
-  if (s.click && audioCtx) {
-    playClick(s.click, audioCtx.currentTime + 0.015);
-  }
-
+  const s = seq[idx];
+  renderStep(s, idx, seq.length);
+  if (s.click && audioCtx) playClick(s.click, audioCtx.currentTime + 0.015);
   const nextIdx = idx + 1;
-  if (nextIdx < total) {
+  if (nextIdx < seq.length) {
     setTimeout(() => runStep(seq, nextIdx, myRunId), s.ms);
   } else {
-    setTimeout(() => {
-      if (!running || runId !== myRunId) return;
-      finish();
-    }, s.ms);
+    setTimeout(() => { if (!running || runId !== myRunId) return; finish(); }, s.ms);
   }
 }
 
@@ -475,30 +581,21 @@ function start() {
 
   setButtons(true);
 
-  // Build speech plan — delays are ms from tap moment
   const COUNTDOWN_MS = 3000;
   const plan = [];
   let t = COUNTDOWN_MS + 100;
-  for (let i = 0; i < seq.length; i++) {
-    const s = seq[i];
-    if (s.speak) {
-      plan.push({ text: s.speak, delayMs: t, rate: s.speakRate || 0.84 });
-    }
+  for (const s of seq) {
+    if (s.speak) plan.push({ text: s.speak, delayMs: t, rate: s.speakRate || 0.84 });
     t += s.ms;
   }
-  // Post-stroke "Read" — spoken 800ms into the crystal bowl decay
   plan.push({ text: 'Read', delayMs: t + 800, rate: 0.72 });
 
-  // SYNCHRONOUS unlock — must happen inside the tap handler call stack
   unlockAndSpeak(plan, myRunId);
 
-  // 3-second countdown
   let countdown = 3;
   const cdEl    = document.getElementById('phaseCue');
-  const cdLabel = document.getElementById('phaseLabel');
-  cdLabel.textContent = 'GET READY';
-  cdEl.textContent    = countdown;
-  cdEl.className      = 'phase-cue gold';
+  document.getElementById('phaseLabel').textContent = 'GET READY';
+  cdEl.textContent = countdown; cdEl.className = 'phase-cue gold';
   if (audioCtx) playClick('soft', audioCtx.currentTime + 0.05);
 
   const cdInterval = setInterval(() => {
@@ -523,6 +620,8 @@ function finish() {
   setButtons(false);
   playCrystalBowl();
   renderComplete();
+  // Refresh stats so TODAY updates immediately after a session shot
+  if (sessionActive) updateStats();
 }
 
 function stop() {
@@ -535,9 +634,7 @@ function stop() {
   renderReady();
 }
 
-function togglePlay() {
-  if (running) stop(); else start();
-}
+function togglePlay() { if (running) stop(); else start(); }
 
 // ═══════════════════════════════════════════════════════════
 // VOICE PRELOAD
@@ -549,13 +646,10 @@ document.getElementById('playBtn').addEventListener('click', () => {
 });
 
 // ═══════════════════════════════════════════════════════════
-// KEYBOARD SHORTCUT — space / enter to play·stop
+// KEYBOARD — space / enter
 // ═══════════════════════════════════════════════════════════
 document.addEventListener('keydown', e => {
-  if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat) {
-    e.preventDefault();
-    togglePlay();
-  }
+  if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat) { e.preventDefault(); togglePlay(); }
 });
 
 // ═══════════════════════════════════════════════════════════

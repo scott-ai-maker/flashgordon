@@ -1,5 +1,26 @@
 # Flash Gordon — Changelog
 
+## v2.1.0 — 2026-03-16
+
+### Session tracking & practice stats
+
+- **Session panel**: explicit START / END SESSION button with live MM:SS timer
+  while active. Replaces per-routine time tracking with whole-session logging.
+- **Stats strip**: always-visible DAY · WEEK · MONTH · STREAK row beneath the
+  session button. Week is calculated Mon–Sun.
+- **Streak counter**: consecutive calendar days with at least one logged session.
+  Streak survives if you practiced yesterday but not yet today.
+- **Session data model**: each session stored as `{ date, start, end, duration,
+  shots }` in `localStorage` key `fg_sessions` — persists across app restarts.
+- **Auto-save on close**: `beforeunload` listener ends any open session so data
+  is never lost if the app is closed without tapping END.
+- **Shot attribution**: shots fired during an active session are recorded per
+  session, enabling future shot-rate analytics.
+- Tightened vertical spacing throughout to accommodate new elements on small
+  screens (iPhone SE and up).
+
+---
+
 ## v2.0.0 — 2026-03-16
 
 ### Orthodox Fundamentals System — Full Rewrite
