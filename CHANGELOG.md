@@ -1,6 +1,25 @@
 # Flash Gordon — Changelog
 
-## v2.1.0 — 2026-03-16
+## v2.3.0 — 2026-03-16
+
+### Shot outcome log — process vs result separation
+
+- **Outcome row** appears above the error log after each rep: ✓ MADE · ✗ MISSED · ⊙ POS ERR
+- Tapping an outcome saves the shot record immediately; tapping again updates it
+- **Per-shot error tracking** (`shotErrors`) separate from session totals — resets
+  each time PLAY is tapped so errors are attributed to the correct rep
+- Shot data stored as `fg_shots` in localStorage: `{ id, date, sessionStart, outcome, errors }`
+- **Analytics extended** (renamed to SHOT ANALYSIS):
+  - Outcome distribution bar chart (MADE / MISSED / POS ERR)
+  - Process vs Result table: make rate on clean reps vs error-flagged reps
+  - Automated diagnostic insight:
+    - Low make rate even on clean reps → aim/speed problem, not mechanics
+    - Large gap between clean and flawed → fixing #1 fault directly improves results
+    - Higher make rate on flawed reps → compensations forming under pressure
+
+---
+
+## v2.2.0 — 2026-03-16
 
 ### Session tracking & practice stats
 

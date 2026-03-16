@@ -157,6 +157,36 @@ animation: pulse 1.0s ease-in-out infinite;
 .error-totals { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:var(--text-dim); text-align:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); }
 .no-data { font-family:'Exo 2',sans-serif; font-size:13px; color:var(--text-dim); text-align:center; padding:40px 20px; line-height:1.8; }
 
+/* ── Outcome buttons ───────────────────────────────────── */
+.outcome-row { display:flex; gap:8px; width:100%; margin-bottom:12px; }
+.outcome-btn { flex:1; font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; padding:9px 4px; border-radius:4px; cursor:pointer; outline:none; transition:all 0.15s; border:1px solid; background:transparent; }
+.outcome-btn.made   { color:#00d4aa; border-color:rgba(0,212,170,0.3); }
+.outcome-btn.missed { color:var(--red);  border-color:rgba(255,68,68,0.3); }
+.outcome-btn.pos    { color:var(--gold); border-color:rgba(201,168,76,0.3); }
+.outcome-btn.made:hover,   .outcome-btn.made.selected   { background:rgba(0,212,170,0.12);  border-color:rgba(0,212,170,0.6);  }
+.outcome-btn.missed:hover, .outcome-btn.missed.selected { background:rgba(255,68,68,0.12);  border-color:rgba(255,68,68,0.6);  }
+.outcome-btn.pos:hover,    .outcome-btn.pos.selected    { background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.6); }
+
+/* ── Outcome bars (reuse error-bar-* with colour overrides) */
+.error-bar-fill.out-made   { background:linear-gradient(90deg,rgba(0,212,170,0.5),#00d4aa); }
+.error-bar-fill.out-missed { background:linear-gradient(90deg,rgba(255,68,68,0.5),var(--red)); }
+.error-bar-fill.out-pos    { background:linear-gradient(90deg,rgba(201,168,76,0.5),var(--gold)); }
+
+/* ── Process vs Result section ─────────────────────────── */
+.section-divider { height:1px; background:rgba(0,191,255,0.08); margin:18px 0 14px; }
+.section-title { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:12px; }
+.pvr-section { border:1px solid rgba(0,191,255,0.1); border-radius:4px; overflow:hidden; margin-top:14px; }
+.pvr-header { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:var(--text-dim); padding:8px 12px; border-bottom:1px solid rgba(0,191,255,0.08); background:rgba(0,191,255,0.03); }
+.pvr-row { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:12px; padding:9px 12px; border-bottom:1px solid rgba(0,191,255,0.05); }
+.pvr-row:last-child { border-bottom:none; }
+.pvr-desc { font-family:'Exo 2',sans-serif; font-size:11px; color:var(--text-dim); }
+.pvr-rate { font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700; }
+.pvr-rate.good { color:#00d4aa; }
+.pvr-rate.mid  { color:var(--gold); }
+.pvr-rate.bad  { color:var(--red); }
+.pvr-n { font-family:'Share Tech Mono',monospace; font-size:8px; color:var(--text-dim); white-space:nowrap; }
+.pvr-insight { font-family:'Exo 2',sans-serif; font-size:11px; color:var(--text-dim); font-style:italic; padding:10px 12px; border-top:1px solid rgba(0,191,255,0.08); line-height:1.5; background:rgba(0,191,255,0.02); }
+
 /* ── Error log panel ───────────────────────────────────── */
 .error-panel { display:none; width:100%; max-width:420px; margin-top:12px; }
 .error-panel-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--text-dim); margin-bottom:8px; text-align:center; }
@@ -238,8 +268,13 @@ animation: pulse 1.0s ease-in-out infinite;
   <!-- Analysis trigger -->
   <button class="analysis-btn" onclick="showAnalytics('week')">▸ ERROR ANALYSIS</button>
 
-  <!-- Error log -->
+  <!-- Error log + Outcome -->
   <div class="error-panel" id="errorPanel">
+    <div class="outcome-row">
+      <button class="outcome-btn made"   onclick="logOutcome('made',this)">✓ MADE</button>
+      <button class="outcome-btn missed" onclick="logOutcome('missed',this)">✗ MISSED</button>
+      <button class="outcome-btn pos"    onclick="logOutcome('pos',this)">⊙ POS ERR</button>
+    </div>
     <div class="error-panel-label">— log error —</div>
     <div class="error-btns">
       <button class="err-btn" onclick="logError('Rushed',this)">RUSHED<span class="err-count" id="ec-Rushed"></span></button>
@@ -259,7 +294,7 @@ animation: pulse 1.0s ease-in-out infinite;
 <div class="analytics-overlay" id="analyticsOverlay">
   <div class="analytics-panel">
     <div class="analytics-header">
-      <span class="analytics-title">ERROR ANALYSIS</span>
+      <span class="analytics-title">SHOT ANALYSIS</span>
       <button class="analytics-close" onclick="hideAnalytics()">✕</button>
     </div>
     <div class="analytics-tabs">
@@ -308,12 +343,42 @@ function buildSequence() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// SHOT LOG — per-shot outcome + error data
+// Each shot: { id, date, sessionStart, outcome, errors }
+// ═══════════════════════════════════════════════════════════
+const SHOTS_KEY = 'fg_shots';
+let shotErrors  = {};   // errors for the current rep only — resets each PLAY
+let pendingShot = null; // shot waiting for outcome tap
+
+function getShots() {
+  try { return JSON.parse(localStorage.getItem(SHOTS_KEY) || '[]'); } catch { return []; }
+}
+function saveShot(shot) {
+  const shots = getShots();
+  const idx   = shots.findIndex(s => s.id === shot.id);
+  if (idx >= 0) shots[idx] = shot; else shots.push(shot);
+  localStorage.setItem(SHOTS_KEY, JSON.stringify(shots));
+}
+function shotsInRange(fromStr, toStr) {
+  return getShots().filter(s => s.date >= fromStr && (!toStr || s.date < toStr));
+}
+
+function logOutcome(outcome, btn) {
+  if (!pendingShot) pendingShot = { id: Date.now(), date: dateKey(new Date()), sessionStart: sessionStartTs, errors: {} };
+  pendingShot.outcome = outcome;
+  saveShot(pendingShot);
+  document.querySelectorAll('.outcome-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// ═══════════════════════════════════════════════════════════
 // ERROR LOG
 // ═══════════════════════════════════════════════════════════
 const errorCounts = {};
 
 function logError(label, btn) {
   errorCounts[label] = (errorCounts[label] || 0) + 1;
+  shotErrors[label]  = (shotErrors[label]  || 0) + 1;
   const countEl = document.getElementById('ec-' + label);
   if (countEl) { countEl.textContent = errorCounts[label]; countEl.classList.add('show'); }
   if (btn) { btn.classList.add('hit'); setTimeout(() => btn.classList.remove('hit'), 350); }
@@ -551,6 +616,64 @@ function buildAnalyticsHTML(period) {
     </div>`;
   }).join('');
 
+  // ── Outcome section ──────────────────────────────────────
+  const periodShots  = shotsInRange(curFrom, curTo);
+  const withOutcome  = periodShots.filter(s => s.outcome);
+  let outcomeHTML = '';
+
+  if (withOutcome.length > 0) {
+    const made   = withOutcome.filter(s => s.outcome === 'made').length;
+    const missed = withOutcome.filter(s => s.outcome === 'missed').length;
+    const pos    = withOutcome.filter(s => s.outcome === 'pos').length;
+    const tot    = withOutcome.length;
+
+    const outcomeBars = [
+      { label:'MADE',    cls:'out-made',   n:made   },
+      { label:'MISSED',  cls:'out-missed', n:missed },
+      { label:'POS ERR', cls:'out-pos',    n:pos    },
+    ].filter(o => o.n > 0).map(o => {
+      const pct = Math.round(o.n / tot * 100);
+      return `<div class="error-bar-row">
+        <span class="error-bar-label">${o.label}</span>
+        <div class="error-bar-track"><div class="error-bar-fill ${o.cls}" style="width:${pct}%"></div></div>
+        <span class="error-bar-pct">${pct}%</span>
+        <span class="error-bar-cnt">×${o.n}</span>
+      </div>`;
+    }).join('');
+
+    // Process vs Result
+    const hasErrors   = s => s.errors && Object.values(s.errors).some(v => v > 0);
+    const clean       = withOutcome.filter(s => !hasErrors(s));
+    const flawed      = withOutcome.filter(s =>  hasErrors(s));
+    const makeRate    = arr => arr.length ? Math.round(arr.filter(s => s.outcome === 'made').length / arr.length * 100) : null;
+    const cleanRate   = makeRate(clean);
+    const flawedRate  = makeRate(flawed);
+    const rateClass   = r => r >= 80 ? 'good' : r >= 55 ? 'mid' : 'bad';
+
+    let pvrRows = '';
+    if (clean.length > 0)  pvrRows += `<div class="pvr-row"><span class="pvr-desc">Clean reps (no errors)</span><span class="pvr-rate ${rateClass(cleanRate)}">${cleanRate}%</span><span class="pvr-n">×${clean.length}</span></div>`;
+    if (flawed.length > 0) pvrRows += `<div class="pvr-row"><span class="pvr-desc">Error-flagged reps</span><span class="pvr-rate ${rateClass(flawedRate)}">${flawedRate}%</span><span class="pvr-n">×${flawed.length}</span></div>`;
+
+    // Diagnostic insight
+    let insight = '';
+    if (cleanRate !== null && flawedRate !== null) {
+      const gap = cleanRate - flawedRate;
+      if (gap < 10 && cleanRate < 70)
+        insight = `<div class="pvr-insight">Make rate is low even on clean reps — likely an aim or speed issue, not mechanics.</div>`;
+      else if (gap >= 20)
+        insight = `<div class="pvr-insight">Strong correlation between errors and misses — fixing your #1 fault should directly improve your make rate.</div>`;
+      else if (flawedRate > cleanRate)
+        insight = `<div class="pvr-insight">You're making shots despite errors. Watch for compensations that will break under pressure.</div>`;
+    }
+
+    outcomeHTML = `
+      <div class="section-divider"></div>
+      <div class="section-title">OUTCOMES</div>
+      <div class="error-bars">${outcomeBars}</div>
+      <div class="error-totals">${tot} of ${periodShots.length} shots have outcome data</div>
+      ${pvrRows ? `<div class="pvr-section"><div class="pvr-header">PROCESS vs RESULT</div>${pvrRows}${insight}</div>` : ''}`;
+  }
+
   return `
     <div class="fault-callout">
       <div class="fault-label">#1 FAULT</div>
@@ -563,7 +686,8 @@ function buildAnalyticsHTML(period) {
       <span class="rate-lbl">errors per 10 shots ${rateCompare}</span>
     </div>` : ''}
     <div class="error-bars">${bars}</div>
-    <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${sessionsInRange(curFrom, curTo).length} sessions</div>`;
+    <div class="error-totals">${cur.totalErrors} errors · ${cur.totalShots} shots · ${sessionsInRange(curFrom, curTo).length} sessions</div>
+    ${outcomeHTML}`;
 }
 
 function showAnalytics(period) {
@@ -721,6 +845,7 @@ function renderComplete() {
   const fl = document.getElementById('doneFlash');
   fl.classList.add('show'); setTimeout(() => fl.classList.remove('show'), 350);
   document.getElementById('errorPanel').style.display = 'block';
+  document.querySelectorAll('.outcome-btn').forEach(b => b.classList.remove('selected'));
 }
 
 function setButtons(playing) {
@@ -752,6 +877,8 @@ function start() {
   requestWakeLock();
   window.speechSynthesis.cancel();
   speechActive = false;
+  shotErrors  = {};    // fresh error slate for this rep
+  pendingShot = null;
   running = true;
   runId++;
   const myRunId = runId;
@@ -793,12 +920,13 @@ function start() {
 function finish() {
   running = false;
   releaseWakeLock();
+  // Create pending shot record — awaits outcome tap
+  pendingShot = { id: Date.now(), date: dateKey(new Date()), sessionStart: sessionStartTs, errors: { ...shotErrors } };
   shotCount++;
   document.getElementById('shotCountNum').textContent = shotCount;
   setButtons(false);
   playCrystalBowl();
   renderComplete();
-  // Refresh stats so TODAY updates immediately after a session shot
   if (sessionActive) updateStats();
 }
 
@@ -807,6 +935,7 @@ function stop() {
   runId++;
   releaseWakeLock();
   speechActive = false;
+  pendingShot = null;
   window.speechSynthesis.cancel();
   setButtons(false);
   renderReady();
